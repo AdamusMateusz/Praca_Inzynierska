@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+
+body{
+	background-color:#337ab7;
+}
+
+.content {
+	box-shadow: 0 0 20px 10px #424242;
+	background-color: #FFF;
+}
+
+.load{
+	text-align: center;
+	padding:24% 0;
+}
