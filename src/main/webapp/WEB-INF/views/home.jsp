@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
-<!DOCTYPE HTML>
-<html lang="pl">
+<!DOCTYPE html>
+<html>
 <head>
 
  <meta charset="utf-8">
@@ -9,18 +9,19 @@
 	
 	<!-- AngularJS -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
 	
 	<!-- Bootstrap -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 	<!-- My stuff -->
 	<link href="<c:url value="/resources/styles.css" />" rel="stylesheet">
-	<script src="<c:url value="/resources/js/app.js" />" ></script>
-	<!-- <script src="<c:url value="/resources/js/controllers.js" />" ></script> -->
+	<script type="text/javascript" src="<c:url value="/resources/js/app.js" />" ></script>
+	<script src="<c:url value="/resources/js/controllers.js" />" ></script> 
+	<script src="<c:url value="/resources/js/drawings.js" />" ></script> 
 
 </head>
  <body ng-app="myApp">
@@ -41,8 +42,8 @@
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
-			<li><a href="#/chat"><span class="glyphicon glyphicon-comment  "></span></a></li>
-			<li><a href="#/info"><span class="glyphicon glyphicon-info-sign"></span></a></li>
+			<li><a href="#/chat" data-toggle="tooltip" data-placement="left" title="Chat"><span class="glyphicon glyphicon-comment"></span></a></li>
+			<li><a href="#/info"data-toggle="tooltip" data-placement="bottom" title="Info"><span class="glyphicon glyphicon-info-sign"></span></a></li>
 
 			</ul> 
 			</div>
@@ -50,8 +51,8 @@
 	</nav>
 		<div class="container content">
 
-			<div ng-controller="GreetingController">
-			  {{ greeting }}
+			<div ng-view>
+				<div class="load">Loading site ...</div>
 			</div>
 
 		</div>

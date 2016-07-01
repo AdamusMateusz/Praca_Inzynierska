@@ -1,3 +1,3 @@
 <div>
-{{gret}} world!
+{{greeting}}
 </div>
