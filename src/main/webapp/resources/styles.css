@@ -1,7 +1,11 @@
 @CHARSET "UTF-8";
 
-body{
-	background-color:#337ab7;
+.ups{
+	padding: 10% 0;
+}
+
+body {
+	background-color: #337ab7;
 }
 
 .content {
@@ -9,7 +13,23 @@ body{
 	background-color: #FFF;
 }
 
-.load{
+.load {
 	text-align: center;
-	padding:24% 0;
+	padding: 24% 0;
+}
+
+.addChat {
+	margin:15px 0;
+}
+
+.chat-btns{
+	align:right;
+	margin-bottom: 15px;
+}
+.linki{
+	margin-top:30px;
+}
+
+.footer{
+	text-align: center;
 }

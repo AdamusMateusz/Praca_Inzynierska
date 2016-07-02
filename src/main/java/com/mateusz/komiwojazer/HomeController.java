@@ -19,12 +19,12 @@ public class HomeController {
 
 	@RequestMapping(value = "/stats", method = RequestMethod.GET)
 	public String stats() {
-		return "stats";
+		return "ups";
 	}
 
 	@RequestMapping(value = "/maps", method = RequestMethod.GET)
 	public String maps() {
-		return "maps";
+		return "ups";
 	}
 
 	@RequestMapping(value = "/chat", method = RequestMethod.GET)
@@ -37,24 +37,19 @@ public class HomeController {
 		return "info";
 	}
 
-	@RequestMapping(value = "/boot", method = RequestMethod.GET)
-	public String boot() {
-		return "boot";
-	}
-
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit() {
-		return "edit";
+		return "ups";
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add() {
-		return "add";
+		return "ups";
 	}
 
 	@RequestMapping(value = "/map", method = RequestMethod.GET)
 	public String map() {
-		return "map";
+		return "ups";
 	}
 
 }
