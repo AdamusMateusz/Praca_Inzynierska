@@ -1,25 +1,30 @@
+<div class="row">
+	<div class="alert alert-danger fade in">
+		<span class="glyphicon glyphicon-exclamation-sign"></span> Autor strony nie
+		ponosi odpowiedzialnosci za tresci umieszane przez uzytkownikow <a
+			class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	</div>
+</div>
+
 <div class="page-header">
 	<h1>Chat</h1>
 	<div class="text-muted">Miejsce dla uzytkownikow poswiecone
 		wymianie zdan na rozne tematy</div>
+
 </div>
 
 <div class="row">
 
 	<div class="col-md-3">
 
+
 		<ul class="list-group" style="margin-bottom: 5px;">
 			<li class="list-group-item active">Tematy</li>
-			<a class="list-group-item "><span class="badge">4</span> O
-				stronie</a>
-			<a class="list-group-item "><span class="badge">5</span> Rozmowy
-				ogolone</a>
-			<a class="list-group-item"><span class="badge">12</span> Algorytm</a>
-			<a class="list-group-item"><span class="badge">174</span>
-				Problemy</a>
-			<a class="list-group-item"><span class="badge">1</span>
-				Propozycje rozbudowy</a>
-			<a class="list-group-item"><span class="badge">5</span> Cokolwiek</a>
+
+			<a ng-repeat="topic in topics" class="list-group-item"
+				ng-click="setActive($index,topic.title)"><span class="badge">{{topic.messagesCount}}</span>
+				{{topic.title}}</a>
+
 		</ul>
 
 		<button type="button" class="btn btn-primary btn-block addChat"
@@ -39,15 +44,21 @@
 
 
 	<div class="col-md-9">
-		<div class="chat-btns col-lg-offset-9">
-			<div class="btn-group">
-				<button type="button" class="btn btn-default">
-					<span class="glyphicon glyphicon-refresh"></span>
-				</button>
-				<button type="button" class="btn btn-success addMessage"
-					data-toggle="collapse" data-target="#message">
-					Dodaj wiadomosc <span class="glyphicon glyphicon-plus"></span>
-				</button>
+
+		<div class="row">
+			<div class="col-md-8">
+				<h4 class="text-muted">{{title}}</h4>
+			</div>
+			<div class="chat-btns col-lg-offset-9">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ng-click="refresh()">
+						<span class="glyphicon glyphicon-refresh"></span>
+					</button>
+					<button type="button" class="btn btn-success addMessage"
+						data-toggle="collapse" data-target="#message">
+						Dodaj wiadomosc <span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</div>
 			</div>
 		</div>
 
@@ -70,44 +81,26 @@
 					</div>
 					<div class="form-group">
 						<div class="col-sm-offset-1 col-sm-11">
-							<button type="submit" class="btn btn-success">Dodaj
-								wiadomosc <span class="glyphicon glyphicon-plus"></button>
+							<button type="submit" class="btn btn-success">
+								Dodaj wiadomosc <span class="glyphicon glyphicon-plus"></span>
+							</button>
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span class="glyphicon glyphicon-user"></span> Autor
+		<div ng-repeat="message in messages">
+			
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span class="glyphicon glyphicon-user"></span> {{message.autor}}
+					</div>
+					<div class="panel-body">{{message.message}}</div>
+				</div>
 			</div>
-			<div class="panel-body">Tekst</div>
 		</div>
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span class="glyphicon glyphicon-user"></span> Marek
-			</div>
-			<div class="panel-body">Bardzo mi sie podoba</div>
-		</div>
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span class="glyphicon glyphicon-user"></span> August
-			</div>
-			<div class="panel-body">Przykladowa tresc bez sensu</div>
-		</div>
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span class="glyphicon glyphicon-user"></span> Zbyszek
-			</div>
-			<div class="panel-body">Fajna strona</div>
-		</div>
-
 
 	</div>
-</div>
+
 

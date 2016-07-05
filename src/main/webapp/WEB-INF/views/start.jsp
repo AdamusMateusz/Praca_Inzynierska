@@ -23,7 +23,7 @@
 
 <h3>Historia</h3>
 <div class="text-muted">Poczatek badan nad problemem komiwojazera
-	nie jest jasny. Wspomina o nim podrecznik z 1832[a], który zawiera
+	nie jest jasny. Wspomina o nim podrecznik z 1832, który zawiera
 	przykladowa trase po Niemczech i Szwajcarii, lecz nie zawiera zadnych
 	matematycznych uzasadnien. W 1859 irlandzki matematyk William Rowan
 	Hamilton sformulowal problem istnienia cyklu o dlugosci n w grafie

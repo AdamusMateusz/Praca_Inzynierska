@@ -66,11 +66,10 @@
 
 
 		<div class="row">
-			<div class="alert alert-info fade in">
-				<span class="glyphicon glyphicon-info-sign"></span> Strona nie uzywa
-				plikow cookie <a class="close" data-dismiss="alert"
-					aria-label="close">&times;</a>
-			</div>
+				<div class="alert alert-info fade in">
+		<span class="glyphicon glyphicon-info-sign"></span> Strona uzywa plikow cookie <a
+			class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	</div>
 		</div>
 
 
