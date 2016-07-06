@@ -25,6 +25,14 @@ public class ChatService {
 	public List<Message> getMessages(int id){
 		return topics.get(id).getMessages();
 	}
+	
+	public void addTopic(String title){
+		topics.add(new Topic(title));
+	}
+	
+	public void addMessage(int topicId, Message m){
+		topics.get(topicId).addMessage(m);
+	}
 
 	@PostConstruct
 	public void generateFakeTopics() {
@@ -34,7 +42,7 @@ public class ChatService {
 
 		for (int i = 0; i < fakeTitles.length; i++) {
 			Topic t = new Topic(fakeTitles[i]);
-			final int range = (int) (Math.random() * 15);
+			final int range = (int) ((Math.random() * 10) + 1 );
 			t.addMessages(Stream.generate(Message::getFakeMessage).limit(range).parallel()
 					.collect(Collectors.toList()));
 			topics.add(t);

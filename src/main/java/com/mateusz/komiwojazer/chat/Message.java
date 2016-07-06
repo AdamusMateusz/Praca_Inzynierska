@@ -2,20 +2,33 @@ package com.mateusz.komiwojazer.chat;
 
 public class Message {
 
-	private final String autor;
-	private final String message;
+	private String author;
+	private String message;
 
-	public Message(String autor, String message) {
-		this.message = message;
-		this.autor = autor;
+	@Deprecated
+	public Message() {
 	}
 
-	public String getAutor() {
-		return autor;
+	public Message(String author, String message) {
+		this.message = message;
+		this.author = author;
+	}
+
+	public String getAuthor() {
+		return author;
 	}
 
 	public String getMessage() {
 		return message;
+	}
+
+	@Deprecated
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	@Deprecated
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public static Message getFakeMessage() {

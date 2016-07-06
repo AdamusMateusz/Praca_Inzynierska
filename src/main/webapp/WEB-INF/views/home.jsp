@@ -29,6 +29,7 @@
 	src="<c:url value="/resources/js/app.js" />"></script>
 <script src="<c:url value="/resources/js/controllers.js" />"></script>
 <script src="<c:url value="/resources/js/drawings.js" />"></script>
+<script src="<c:url value="/resources/js/model.js" />"></script>
 
 </head>
 <body ng-app="myApp">

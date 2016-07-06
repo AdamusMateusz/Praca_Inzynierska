@@ -4,7 +4,7 @@
 
 
 <div class="alert alert-info">
-	<strong><span class="glyphicon glyphicon-info-sign"></span> Info!</strong> Trwa wczytywanie danych z serwera
+	</span> <span class="label label-info">Info</span> Trwa wczytywanie danych z serwera
 	<hr>
 	<div class="progress">
 
