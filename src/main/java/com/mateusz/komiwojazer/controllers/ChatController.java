@@ -31,12 +31,12 @@ public class ChatController {
 		return chat.getMessages(id);
 	}
 	
-	@RequestMapping(value="/addTopic",  method = RequestMethod.POST,headers="Accept=*/*")
+	@RequestMapping(value="/addTopic",  method = RequestMethod.POST, headers="Accept=*/*")
 	public void addTopic(@RequestBody String topic){
 		chat.addTopic(topic);
 	}
 	
-	@RequestMapping(value="/addMessage{topicId}",  method = RequestMethod.POST,headers="Accept=*/*")
+	@RequestMapping(value="/addMessage{topicId}",  method = RequestMethod.POST, headers="Accept=*/*")
 	public void addMessage(@RequestParam int topicId, @RequestBody Message m){
 		chat.addMessage(topicId, m);
 	}

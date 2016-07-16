@@ -40,27 +40,35 @@
 	wsrod amatorow jak i profesjonalistow.</div>
 
 <div class="row linki">
-	<div class="well col-md-offset-1 col-md-3">
-		<h4>
-			Lista wszystkich map <a href="#/maps" class="btn btn-link"><span
-				class="glyphicon glyphicon-arrow-right"></span></a>
+	<div class=" col-md-offset-1 col-md-3">
+		<div class="well">
+			<h4>
+				Lista map <a href="#/maps" class="btn btn-link"><span
+					class="glyphicon glyphicon-arrow-right"></span></a>
 
-		</h4>
-		<div class="text-muted">W tym miejscu znajdziesz liste
-			wszysktich map</div>
+			</h4>
+			<div class="text-muted">W tym miejscu znajdziesz liste
+				wszysktich map</div>
+		</div>
 	</div>
-	<div class="well col-md-3">
-		<h4>
-			Statystyki <a href="#/stats" class="btn btn-link"><span
-				class="glyphicon glyphicon-arrow-right"></span></a>
-		</h4>
-		<div class="text-muted">Statystyki zwiazane z dzialaniem serwera</div>
+	<div class="col-md-3">
+		<div class="well">
+			<h4>
+				Statystyki <a href="#/stats" class="btn btn-link"><span
+					class="glyphicon glyphicon-arrow-right"></span></a>
+			</h4>
+			<div class="text-muted">Statystyki zwiazane z dzialaniem
+				serwera</div>
+		</div>
 	</div>
-	<div class="well  col-md-3">
-		<h4>
-			Komunikacja <a href="#/chat" class="btn btn-link"><span
-				class="glyphicon glyphicon-arrow-right"></span></a>
-		</h4>
-		<div class="text-muted">Miejsce dla uzytkownikow przeznaczone do komunikacji</div>
+	<div class="col-md-3">
+		<div class="well">
+			<h4>
+				Komunikacja <a href="#/chat" class="btn btn-link"><span
+					class="glyphicon glyphicon-arrow-right"></span></a>
+			</h4>
+			<div class="text-muted">Miejsce przeznaczone
+				do komunikacji</div>
+		</div>
 	</div>
 </div>

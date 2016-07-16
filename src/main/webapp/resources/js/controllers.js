@@ -2,12 +2,70 @@ var app = angular.module("controllers", [ 'drawingsService']);
 
 app.controller('mapsController', [ '$scope', '$http', 'draw',
 		function($scope, $http, draw) {
+			$scope.request = {
+				quantity: 5,
+				parents: 10,
+				kids : 20,
+				change : 20,
+				crossingGene : 50,
+				crossingChromosome : 50,
+				mutationGene : 5,
+				mutationChromosome : 5,
+				useParents : true
+			};
 
+			$scope.maps= mapsService;
+			
+			$scope.getClass = function(string, val, bar){
+				
+				if(val == -1)
+					return string + "danger";
+				else if(val == 100)
+					return string + "success";
+				else if(val == 0)
+					return string + "default";
+				
+				if (bar != undefined && bar){
+					return string + "primary progress-bar-striped active";
+				}
+				return string + "primary";
+			};
+			
+		} ]);
+
+app.controller('mapController', [ '$scope', '$http', 'draw','$routeParams',
+		function($scope, $http, draw, $routeParams) {
+			$scope.request = {
+				quantity : 5,
+				parents : 10,
+				kids : 20,
+				change : 20,
+				crossingGene : 50,
+				crossingChromosome : 50,
+				mutationGene : 5,
+				mutationChromosome : 5,
+				useParents : true
+			};
+			
+			$scope.id = $routeParams.id;
+			$scope.seconds = 5;
 		} ]);
 
 app.controller('statsController', [ '$scope', '$http', '$timeout',
 		function($scope, $http, $timeout) {
+			$scope.progress = 0;
+			$scope.test = function(){
 
+				$timeout(function(){
+					$scope.progress+=10;
+					if($scope.progress < 100)
+						$scope.test();
+					else
+						$timeout(function(){
+							$scope.progress = -1;
+						},7000);
+				},(Math.random()*750));
+			}
 		} ]);
 
 app.controller('chatController', [
@@ -15,7 +73,6 @@ app.controller('chatController', [
 		'$http',
 		'$timeout',
 		function($scope, $http, $timeout) {
-			$scope.sent=false;
 			$scope.message={author:"",message:""};
 			
 			$timeout(function() {
@@ -68,7 +125,7 @@ app.controller('chatController', [
 								if (response.status == 200) {
 									$scope.messages.push(new Message($scope.message.author,$scope.message.message));	
 									$scope.topics[$scope.active].messagesCount++;
-									$scope.sent=true;
+									$scope.message.message="";
 								}
 							})
 				};

@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 
-.ups{
+.ups {
 	padding: 10% 0;
 }
 
@@ -19,17 +19,42 @@ body {
 }
 
 .addChat {
-	margin:15px 0;
+	margin: 15px 0;
 }
 
-.chat-btns{
-	align:right;
+.addMap {
+	margin: 25px 0;
+}
+
+.chat-btns {
+	align: right;
 	margin-bottom: 15px;
 }
-.linki{
-	margin-top:30px;
+
+.linki {
+	margin-top: 30px;
 }
 
-.footer{
+.footer {
 	text-align: center;
+}
+
+.mapsTitle {
+	margin-bottom: 15px;
+}
+
+.myBar {
+	margin: 0 0;
+}
+
+.right {
+	float: right !important;
+	margin-right: 15px;
+}
+
+canvas{
+	display: block;
+	margin: auto;
+	height: auto;
+	width: 100%;
 }

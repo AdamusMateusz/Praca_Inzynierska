@@ -48,4 +48,12 @@ public class ChatService {
 			topics.add(t);
 		}
 	}
+	
+	/*
+	 * Metody zwi¹zane ze statystykami chatu
+	 * */
+	
+	public int getTopicsNumber(){
+		return topics.size();
+	}
 }

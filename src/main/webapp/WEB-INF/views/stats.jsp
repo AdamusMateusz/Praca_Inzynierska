@@ -3,14 +3,19 @@
 </div>
 
 
-<div class="alert alert-info">
-	</span> <span class="label label-info">Info</span> Trwa wczytywanie danych z serwera
+<div class="alert alert-info" ng-init="test()" ng-if="progress != -1">
+	<span class="label label-info">Info</span> Trwa wczytywanie danych z
+	serwera
 	<hr>
 	<div class="progress">
 
-		<div
-			class="progress-bar progress-bar-info progress-bar-striped active"
-			role="progressbar" style="width: 40%">Wczytywanie danych</div>
+		<div ng-if="progress != 100"
+			class="progress-bar progress-bar-striped active" role="progressbar"
+			style="width: {{progress}}%">Wczytywanie danych</div>
+
+		<div ng-if="progress == 100" class="progress-bar progress-bar-success"
+			role="progressbar" style="width: {{progress}}%">Wczytywanie
+			zakonczone</div>
 	</div>
 </div>
 
@@ -78,4 +83,19 @@
 			<div class="text-small text-muted">15</div>
 		</div>
 	</div>
+</div>
+
+<h3>Serwer</h3>
+<div class="well">
+Zapotrzebowanie serwera na pamiec
+<div class="progress">
+	<div
+		class="progress-bar progress-bar-success"
+		role="progressbar" style="width: 40%">Free Space</div>
+	<div
+		class="progress-bar progress-bar-warning"
+		role="progressbar" style="width: 10%">Warning</div>
+	<div class="progress-bar progress-bar-danger" role="progressbar"
+		style="width: 20%">Danger</div>
+</div>
 </div>

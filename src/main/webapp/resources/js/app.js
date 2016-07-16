@@ -1,7 +1,7 @@
-angular.module("myApp", [ 'controllers', 'ngRoute' ]).config(
+angular.module("myApp", [ 'controllers', 'ngRoute' ,'ui.bootstrap' ]).config(
 		function($routeProvider) {
 			$("[data-toggle='tooltip']").tooltip();
-
+			
 			$routeProvider.when('/start', {
 				templateUrl : 'start.html'
 			}).when('/chat', {
@@ -19,10 +19,11 @@ angular.module("myApp", [ 'controllers', 'ngRoute' ]).config(
 				templateUrl : 'edit.html'
 			}).when('/edit', {
 				templateUrl : 'edit.html'
-			}).when('/map', {
+			}).when('/map/:id', {
+				controller : 'mapController',
 				templateUrl : 'map.html'
 			}).otherwise({
 				redirectTo : '/start'
 			});
-
+			
 		});

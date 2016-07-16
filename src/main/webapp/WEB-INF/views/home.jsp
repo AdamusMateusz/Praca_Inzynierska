@@ -14,6 +14,7 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
 
+
 <!-- Bootstrap -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -22,6 +23,9 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap and Angular integration-->
+<script src="http://angular-ui.github.com/bootstrap/ui-bootstrap-tpls-0.1.0-SNAPSHOT.js"></script>
 
 <!-- My stuff -->
 <link href="<c:url value="/resources/styles.css" />" rel="stylesheet">
@@ -72,7 +76,6 @@
 			class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	</div>
 		</div>
-
 
 		<div ng-view>
 			<div class="load">Loading site ...</div>

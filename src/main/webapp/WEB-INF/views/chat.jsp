@@ -47,15 +47,15 @@
 	<div class="col-md-9">
 
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-2">
 				<h4 class="text-muted">{{title}}</h4>
 			</div>
-			<div class="chat-btns col-lg-offset-9">
+			<div class="chat-btns right">
 				<div class="btn-group" ng-if="active!=undefined">
 					<button type="button" class="btn btn-default" ng-click="refresh()">
 						<span class="glyphicon glyphicon-refresh"></span>
 					</button>
-					<button type="button" class="btn btn-success addMessage"
+					<button type="button" class="btn btn-success"
 						data-toggle="collapse" data-target="#message">
 						Dodaj wiadomosc <span class="glyphicon glyphicon-plus"></span>
 					</button>
@@ -63,7 +63,7 @@
 			</div>
 		</div>
 
-		<div class="collapse" id="message" ng-if="!sent">
+		<div class="collapse" id="message">
 			<div class="well">
 				<form class="form-horizontal">
 					<div class="form-group">
@@ -83,7 +83,7 @@
 					<div class="form-group">
 						<div class="col-sm-offset-1 col-sm-11">
 							<button type="submit" class="btn btn-success"
-								ng-click="addMessage()">
+								ng-click="addMessage()" data-toggle="collapse" data-target="#message">
 								Dodaj wiadomosc <span class="glyphicon glyphicon-plus"></span>
 							</button>
 						</div>
