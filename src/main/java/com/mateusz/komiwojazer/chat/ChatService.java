@@ -53,7 +53,4 @@ public class ChatService {
 	 * Metody zwi¹zane ze statystykami chatu
 	 * */
 	
-	public int getTopicsNumber(){
-		return topics.size();
-	}
 }

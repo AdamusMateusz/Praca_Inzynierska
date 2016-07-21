@@ -87,7 +87,7 @@ app.controller('chatController', [
 			$scope.setActive = function(val, title) {
 				$scope.active = val;
 				$scope.title = title;
-				$http.get("chat/messages?id=" + val).then(
+				$http.get("chat/messages/" + val).then(
 						function(response) {
 							if (response.status == 200) {
 								$scope.messages = JSON.parse(JSON
@@ -97,7 +97,7 @@ app.controller('chatController', [
 			};
 
 			$scope.refresh = function() {
-				$http.get("chat/messages?id=" + $scope.active).then(
+				$http.get("chat/messages/" + $scope.active).then(
 						function(response) {
 							if (response.status == 200) {
 								$scope.messages = JSON.parse(JSON
@@ -120,7 +120,7 @@ app.controller('chatController', [
 			
 			$scope.addMessage = function() {
 				if(validate($scope.message)){
-					$http.post("chat/addMessage?topicId="+$scope.active,$scope.message).then(
+					$http.post("chat/addMessage/"+$scope.active,$scope.message).then(
 							function(response) {
 								if (response.status == 200) {
 									$scope.messages.push(new Message($scope.message.author,$scope.message.message));	

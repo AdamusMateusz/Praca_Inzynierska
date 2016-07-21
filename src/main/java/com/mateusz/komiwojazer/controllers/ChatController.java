@@ -3,10 +3,10 @@ package com.mateusz.komiwojazer.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,8 +26,8 @@ public class ChatController {
 		return chat.getTopics();
 	}
 	
-	@RequestMapping(value="/messages{id}",  method = RequestMethod.GET)
-	public @ResponseBody List<Message> messages(@RequestParam int id){
+	@RequestMapping(value="/messages/{id}",  method = RequestMethod.GET)
+	public @ResponseBody List<Message> messages(@PathVariable("id") int id){
 		return chat.getMessages(id);
 	}
 	
@@ -36,8 +36,8 @@ public class ChatController {
 		chat.addTopic(topic);
 	}
 	
-	@RequestMapping(value="/addMessage{topicId}",  method = RequestMethod.POST, headers="Accept=*/*")
-	public void addMessage(@RequestParam int topicId, @RequestBody Message m){
+	@RequestMapping(value="/addMessage/{topicId}",  method = RequestMethod.POST, headers="Accept=*/*")
+	public void addMessage(@PathVariable("topicId") int topicId, @RequestBody Message m){
 		chat.addMessage(topicId, m);
 	}
 	
