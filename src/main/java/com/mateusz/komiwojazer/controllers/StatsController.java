@@ -16,7 +16,7 @@ public class StatsController {
 
 	@RequestMapping("/stats")
 	public Map<String,String> topicsNumber(){
-	return null;	
+		return null;	
 	}
 	
 	

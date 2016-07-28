@@ -21,10 +21,11 @@ public class TravelingSalesmanService {
 	private ConcurrentHashMap<Integer, CompletableFuture<Task>> tasks;
 	private ConcurrentHashMap<Integer, Task> completedTasks;
 	private ConcurrentHashMap<Integer, ArgumentsSet> arguments;
+	private ConcurrentHashMap<Integer, MinAndMax> results;
 	private AtomicInteger counter;
 
 	public TravelingSalesmanService() {
-		
+
 		// inicjowanie nowych zmiennych
 		tasks = new ConcurrentHashMap<>();
 		completedTasks = new ConcurrentHashMap<>();
@@ -37,16 +38,28 @@ public class TravelingSalesmanService {
 	}
 
 	public Integer startNewTask(ArgumentsSet set) {
-		Integer i = counter.getAndIncrement();
-		Task m = Task.produceTask(set);
-		// TODO Completable future
-
-		return i;
+		return startNewTask(-1,set);
+	}
+	
+	private Integer startNewTask(int id, ArgumentsSet set) {
+		Integer key = (id == -1 ? counter.getAndIncrement() : id);
+		arguments.put(key, set);
+		CompletableFuture<Task> t = Task.produceTask(set);
+		tasks.put(key, t);
+		t.thenAccept(task -> results.put(key, MinAndMax.getMinAndMax(task)));
+		return key;
 	}
 
-	public void updateArguments(ArgumentsSet set) {
-		// TODO Auto-generated method stub
-
+	public void updateArguments(int id, ArgumentsSet set) {
+		ArgumentsSet oldSet = arguments.get(id);
+		if (oldSet == null)
+			arguments.put(id, set);
+		else {
+			if (oldSet.isChangeCritical(set))
+				startNewTask(set);
+			else
+				arguments.put(id, set);
+		}
 	}
 
 	public void delete(int id, String password) {
@@ -69,35 +82,30 @@ public class TravelingSalesmanService {
 		threadFactory().newThread(() -> {
 			// TODO zrobic cos, zeby ten watek ciagle nie krecil sie bez sensu
 			// na pelnych obrotach
-			
+
 			while (true) {
-				if(tasks.isEmpty()){
+				if (tasks.isEmpty()) {
 					try {
-						TimeUnit.SECONDS.sleep(15);
-						System.out.println("Pusto");
+						TimeUnit.SECONDS.sleep(10);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}else{
+				} else {
 					executeTasks();
 				}
 			}
 		}).start();
 
-		// CompletableFuture.runAsync(() -> executeTasks(),
-		// Executors.newSingleThreadExecutor(produceThreadFactory()))
-		// .thenAccept(VOID -> construct());
 	}
 
 	private void executeTasks() {
-		tasks.forEachEntry(Runtime.getRuntime().availableProcessors() * 2, entry -> {
+		tasks.forEachEntry(Long.MAX_VALUE, entry -> {
 			try {
-				final CompletableFuture<Task> val = entry.getValue();
+				final CompletableFuture<Task> future = entry.getValue();
 
-				if (val.isDone()) {
-					Task task;
-					task = val.get();
+				if (future.isDone()) {
+					Task task = future.get();
 
 					if (task.isComplete()) {
 						completedTasks.put(entry.getKey(), entry.getValue().get());
@@ -138,5 +146,10 @@ public class TravelingSalesmanService {
 			t.setDaemon(true);
 			return t;
 		};
+	}
+
+	public List<Task> getAllMapsOverview() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

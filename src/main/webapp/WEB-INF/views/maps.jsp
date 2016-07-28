@@ -23,7 +23,7 @@
 
 			<div class="form-group">
 				<label class="control-label col-md-2" for="iloscM">Ilosc
-					miast:</label>
+					miast</label>
 				<div class="col-md-10">
 					<div class="input-group">
 						<input type="range" class="form-control" id="iloscM"
@@ -35,7 +35,7 @@
 
 			<div class="form-group">
 				<label class="control-label col-md-2" for="number">Ilosc
-					rodzicow:</label>
+					rodzicow</label>
 				<div class="col-md-4">
 					<div class="input-group">
 						<input type="range" class="form-control" id="number"
@@ -45,7 +45,7 @@
 				</div>
 
 				<label class="control-label col-md-2" for="child">Ilosc
-					potomkow:</label>
+					potomkow</label>
 				<div class="col-md-4">
 					<div class="input-group">
 						<input type="range" class="form-control" id="child"
@@ -55,10 +55,10 @@
 				</div>
 			</div>
 			<div class="text-center mapsTitle">
-				<strong>Prawdopodobienstwo krzyzowania</strong>
+				<strong>Prawdopodobienstwo krzyzowania:</strong>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-md-2" for="genC">Genu: </label>
+				<label class="control-label col-md-2" for="genC">Genu </label>
 				<div class="col-md-4">
 					<div class="input-group">
 						<span class="input-group-btn">
@@ -71,7 +71,7 @@
 					</div>
 				</div>
 
-				<label class="control-label col-md-2" for="chromoC">Chromosomu:</label>
+				<label class="control-label col-md-2" for="chromoC">Chromosomu</label>
 				<div class="col-md-4">
 					<div class="input-group">
 						<span class="input-group-btn">
@@ -86,11 +86,11 @@
 			</div>
 
 			<div class="text-center mapsTitle">
-				<strong>Prawdopodobienstwo mutacji</strong>
+				<strong>Prawdopodobienstwo mutacji:</strong>
 			</div>
 
 			<div class="form-group">
-				<label class="control-label col-md-2" for="genM">Genu: </label>
+				<label class="control-label col-md-2" for="genM">Genu </label>
 				<div class="col-md-4">
 					<div class="input-group">
 						<span class="input-group-btn">
@@ -104,7 +104,7 @@
 					</div>
 				</div>
 
-				<label class="control-label col-md-2" for="chromoM">Chromosomu:</label>
+				<label class="control-label col-md-2" for="chromoM">Chromosomu</label>
 				<div class="col-md-4">
 					<div class="input-group">
 						<span class="input-group-btn">
@@ -115,6 +115,17 @@
 							ng-model="request.mutationChromosome" min="0.1" max="10"
 							step="0.1"> <span class="input-group-addon">{{request.mutationChromosome
 							| number:1}}</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-2" for="change">Wymagany procent zmiany</label>
+				<div class="col-md-10">
+					<div class="input-group">
+						<input type="range" class="form-control" id="change"
+							ng-model="request.change" min="5" max="100"> <span
+							class="input-group-addon">{{request.change}}</span>
 					</div>
 				</div>
 			</div>
@@ -131,7 +142,7 @@
 			</div>
 
 			<div class="form-group">
-				<label class="control-label col-md-2" for="email">Haslo:</label>
+				<label class="control-label col-md-2" for="email">Nowe haslo</label>
 				<div class="col-md-10">
 					<div class="input-group">
 						<input type="password" class="form-control" id="password"
@@ -160,14 +171,20 @@
 		<div class="panel-body">
 			Ilosc miast: {{map.cities}}
 
-
 			<div class="text-right">
-				<a ng-class='getClass("btn btn-md btn-",map.progress)'
-					href="#/map/{{map.id}}"><span
-					class="glyphicon glyphicon-search"></span></a>
+				<div class="btn-group btn-group-sm" role="group">
+
+					<a class='btn btn-default'>
+						<span class="glyphicon glyphicon-eye-open"></span>
+						<a class='btn btn-default'><span class="glyphicon glyphicon-pause"></span></a>
+					</a>
+					 <a ng-class='getClass("btn btn-",map.progress)'
+						href="#/map/{{map.id}}">Wiecej <span
+						class="glyphicon glyphicon-search"></span></a>
+
+				</div>
 			</div>
 		</div>
-
 		<div class="progress myBar">
 			<div
 				ng-class='getClass("progress-bar progress-bar-",map.progress,true)'

@@ -1,6 +1,7 @@
 package com.mateusz.komiwojazer.controllers;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mateusz.komiwojazer.geneticAlgorithm.ArgumentsSet;
+import com.mateusz.komiwojazer.geneticAlgorithm.MinAndMax;
 import com.mateusz.komiwojazer.geneticAlgorithm.Task;
 import com.mateusz.komiwojazer.geneticAlgorithm.TravelingSalesmanService;
 
@@ -24,61 +26,75 @@ import com.mateusz.komiwojazer.geneticAlgorithm.TravelingSalesmanService;
 @RequestMapping(value = "/komiwojazer")
 public class KomiwojazerController {
 
+	private static final int AWAIT_TIME = 10;
+
 	@Autowired
 	private TravelingSalesmanService service;
-	
+
 	@RequestMapping("/test")
-	public @ResponseBody String test(){
-		return "test";
+	public @ResponseBody Task test() throws InterruptedException, ExecutionException, TimeoutException {
+		CompletableFuture<Task> task = Task.produceTask(ArgumentsSet.fakeSet());
+		task.thenAccept(t -> {
+			System.out.println(MinAndMax.getMinAndMax(t));
+		});
+
+		return task.get(AWAIT_TIME, TimeUnit.SECONDS);
 	}
-	
-	@RequestMapping(value="/startMap", method = RequestMethod.POST)
-	public @ResponseBody Integer startNewMap(@RequestBody ArgumentsSet set){
+
+	@RequestMapping(value = "/startMap", method = RequestMethod.POST)
+	public @ResponseBody Integer startNewMap(@RequestBody ArgumentsSet set) {
 		return service.startNewTask(set);
 	}
-	
-	@RequestMapping(value="/changeArguments", method = RequestMethod.PUT)
-	public void updateArguments(@RequestBody ArgumentsSet set){
-		service.updateArguments(set);
+
+	@RequestMapping(value = "/changeArguments/{id}", method = RequestMethod.PUT)
+	public void updateArguments(@RequestBody ArgumentsSet set, @PathVariable("id") int id) {
+		service.updateArguments(id, set);
 	}
-	
-	@RequestMapping(value="/getMap/{id}", method = RequestMethod.GET)
-	public @ResponseBody Task getMap(@PathVariable("id") int id) throws InterruptedException, ExecutionException, TimeoutException{
-		return service.getMap(id).get(10, TimeUnit.SECONDS);
+
+	@RequestMapping(value = "/getMap/{id}", method = RequestMethod.GET)
+	public @ResponseBody Task getMap(@PathVariable("id") int id)
+			throws InterruptedException, ExecutionException, TimeoutException {
+		return service.getMap(id).get(AWAIT_TIME, TimeUnit.SECONDS);
 	}
-	
-	@RequestMapping(value="/getMapsOverview/{lastID}/{quantity}", method = RequestMethod.GET)
-	public @ResponseBody List<Task> getMapsOverview(@PathVariable("id") int id, @PathVariable(value="quantity") int quantity){
-		return service.getMapsOverview(id,quantity);
+
+	@RequestMapping(value = "/getMapsOverview/{lastID}/{quantity}", method = RequestMethod.GET)
+	public @ResponseBody List<Task> getMapsOverview(@PathVariable("id") int id,
+			@PathVariable(value = "quantity") int quantity) {
+		return service.getMapsOverview(id, quantity);
 	}
-	
-	@RequestMapping(value="/deleteMap/{id}", method = RequestMethod.DELETE)
-	public void getMapsOverview(@PathVariable("id") int id,@RequestBody String password){
-		service.delete(id,password);
+
+	@RequestMapping(value = "/getAllMapsOverview", method = RequestMethod.GET)
+	public @ResponseBody List<Task> getAllMapsOverview() {
+		return service.getAllMapsOverview();
 	}
-	
+
+	@RequestMapping(value = "/deleteMap/{id}", method = RequestMethod.DELETE)
+	public void getMapsOverview(@PathVariable("id") int id, @RequestBody String password) {
+		service.delete(id, password);
+	}
+
 	public void setService(TravelingSalesmanService service) {
 		this.service = service;
 	}
-	
-	//TODO Ustawic prawidlowe statusy (np.404) do odpowiadajacego bledu
+
+	// TODO Ustawic prawidlowe statusy (np.404) do odpowiadajacego bledu
 	@ExceptionHandler(TimeoutException.class)
-	public @ResponseBody String timeout(HttpServletResponse rs){
+	public @ResponseBody String timeout(HttpServletResponse rs) {
 		return "timeout";
 	}
-	
+
 	@ExceptionHandler(ExecutionException.class)
-	public @ResponseBody String executionException(HttpServletResponse rs){
+	public @ResponseBody String executionException(HttpServletResponse rs) {
 		return "executionException";
 	}
-	
+
 	@ExceptionHandler(InterruptedException.class)
-	public @ResponseBody String interruptedException(HttpServletResponse rs){
+	public @ResponseBody String interruptedException(HttpServletResponse rs) {
 		return "interruptedException";
 	}
-	
+
 	@ExceptionHandler(NullPointerException.class)
-	public @ResponseBody String nullPointer(HttpServletResponse rs){
+	public @ResponseBody String nullPointer(HttpServletResponse rs) {
 		rs.setStatus(200);
 		return "nullPointerException";
 	}

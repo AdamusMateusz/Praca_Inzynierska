@@ -32,7 +32,11 @@
 			<canvas id="chart" ></canvas>
 		</div>
 	</pane>
-
+<pane heading="Tabela odleglosci">
+<div class="well">
+Tabela odleglosci
+</div>
+</pane>
 	<pane heading="Parametry">
 		<div class="well">
 
