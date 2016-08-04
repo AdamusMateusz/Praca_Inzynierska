@@ -58,3 +58,14 @@ canvas{
 	height: auto;
 	width: 100%;
 }
+
+svg{
+	display: block;
+	margin: auto;
+	height: auto;
+	width: 100%;
+}
+
+.tabs{
+	margin-top: 20px !important;
+}

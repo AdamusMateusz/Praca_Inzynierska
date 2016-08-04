@@ -20,7 +20,7 @@ public class TravelingSalesmanService {
 	private ExecutorService executor;
 	private ConcurrentHashMap<Integer, CompletableFuture<Task>> tasks;
 	private ConcurrentHashMap<Integer, Task> completedTasks;
-	private ConcurrentHashMap<Integer, ArgumentsSet> arguments;
+	private ConcurrentHashMap<Integer, Request> arguments;
 	private ConcurrentHashMap<Integer, MinAndMax> results;
 	private AtomicInteger counter;
 
@@ -37,21 +37,21 @@ public class TravelingSalesmanService {
 
 	}
 
-	public Integer startNewTask(ArgumentsSet set) {
-		return startNewTask(-1,set);
+	public Integer startNewTask(Request request) {
+		return startNewTask(-1,request);
 	}
 	
-	private Integer startNewTask(int id, ArgumentsSet set) {
+	private Integer startNewTask(int id, Request request) {
 		Integer key = (id == -1 ? counter.getAndIncrement() : id);
-		arguments.put(key, set);
-		CompletableFuture<Task> t = Task.produceTask(set);
+		arguments.put(key, request);
+		CompletableFuture<Task> t = Task.produceTask(request);
 		tasks.put(key, t);
 		t.thenAccept(task -> results.put(key, MinAndMax.getMinAndMax(task)));
 		return key;
 	}
 
-	public void updateArguments(int id, ArgumentsSet set) {
-		ArgumentsSet oldSet = arguments.get(id);
+	public void updateRequest(int id, Request set) {
+		Request oldSet = arguments.get(id);
 		if (oldSet == null)
 			arguments.put(id, set);
 		else {
@@ -88,7 +88,6 @@ public class TravelingSalesmanService {
 					try {
 						TimeUnit.SECONDS.sleep(10);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else {
@@ -124,7 +123,7 @@ public class TravelingSalesmanService {
 
 	@PreDestroy
 	public void destroy() {
-		// Watki sa demonami, wiec ta funkcja nie jest potrzebna, ale lepiej
+		// Watki sa demonami, wiec ta funkcja nie jest niezbêdna, ale lepiej
 		// posprz¹taæ po programie
 		try {
 			executor.shutdown();

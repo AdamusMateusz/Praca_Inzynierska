@@ -15,7 +15,7 @@ public class StatsController {
 	private ChatService chat;
 
 	@RequestMapping("/stats")
-	public Map<String,String> topicsNumber(){
+	public Map<String,String> chat(){
 		return null;	
 	}
 	

@@ -2,11 +2,12 @@
 <div class="row">
 	<div class="hidden-lg hidden-md alert alert-danger fade in">
 		<span class="glyphicon glyphicon-exclamation-sign"></span> Strona moze
-		nie byc wyswietlana poprawnie przy niskich rozdzielczosciach <a
+		nie byc wyswietlana poprawnie przy tak niskich rozdzielczosciach <a
 			class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	</div>
 </div>
 
+<div class="tabs">
 <tabs> <pane heading="Mapa">
 <div class="well">
 
@@ -37,7 +38,7 @@
 Tabela odleglosci
 </div>
 </pane>
-	<pane heading="Parametry">
+	<pane heading="Ustawienia">
 		<div class="well">
 
 	<form class="form-horizontal addMap" role="form">
@@ -148,9 +149,23 @@ Tabela odleglosci
 
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
-				<button type="submit" class="btn btn-success">
-					Zmien ustawienia <span class="glyphicon glyphicon-refresh"></span>
-				</button>
+				<div class="btn-group">
+				<button type="submit" class="btn btn-danger">
+						Usun <span class="glyphicon glyphicon-trash"></span>
+					</button>
+					<button type="submit" class="btn btn-warning">
+						<span class="glyphicon glyphicon-pause"></span>
+					</button>
+					<button type="submit" class="btn btn-warning">
+						<span class="glyphicon glyphicon-play"></span>
+					</button>
+					<button type="submit" class="btn btn-warning">
+					 <span class="glyphicon glyphicon-refresh"></span>
+					</button>
+					<button type="submit" class="btn btn-success">
+						Zapisz nowe ustawienia <span class="glyphicon glyphicon-edit"></span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</form>
@@ -159,3 +174,4 @@ Tabela odleglosci
 
 
  </tabs>
+ </div>

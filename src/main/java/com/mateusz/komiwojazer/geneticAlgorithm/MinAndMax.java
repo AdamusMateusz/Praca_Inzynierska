@@ -24,8 +24,9 @@ public class MinAndMax {
 		double min = Integer.MAX_VALUE, max = -1, rate = 0;
 		double[][] distanceMatrix = task.getDistanceMatrix();
 
-		for (int i = 0; i < quantity; i++)
+		for (int i = 0; i < quantity; i++) {
 			cities[i] = i;
+		}
 		cities[quantity - 1] = quantity - 1;
 
 		while (!isLastElement(cities)) {

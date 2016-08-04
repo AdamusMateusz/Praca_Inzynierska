@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mateusz.komiwojazer.geneticAlgorithm.ArgumentsSet;
-import com.mateusz.komiwojazer.geneticAlgorithm.MinAndMax;
+import com.mateusz.komiwojazer.geneticAlgorithm.Request;
 import com.mateusz.komiwojazer.geneticAlgorithm.Task;
 import com.mateusz.komiwojazer.geneticAlgorithm.TravelingSalesmanService;
 
@@ -33,22 +32,22 @@ public class KomiwojazerController {
 
 	@RequestMapping("/test")
 	public @ResponseBody Task test() throws InterruptedException, ExecutionException, TimeoutException {
-		CompletableFuture<Task> task = Task.produceTask(ArgumentsSet.fakeSet());
+		CompletableFuture<Task> task = Task.produceTask(Request.fakeSet());
 		task.thenAccept(t -> {
-			System.out.println(MinAndMax.getMinAndMax(t));
+			//System.out.println(MinAndMax.getMinAndMax(t));
 		});
 
 		return task.get(AWAIT_TIME, TimeUnit.SECONDS);
 	}
 
 	@RequestMapping(value = "/startMap", method = RequestMethod.POST)
-	public @ResponseBody Integer startNewMap(@RequestBody ArgumentsSet set) {
+	public @ResponseBody Integer startNewMap(@RequestBody Request set) {
 		return service.startNewTask(set);
 	}
 
 	@RequestMapping(value = "/changeArguments/{id}", method = RequestMethod.PUT)
-	public void updateArguments(@RequestBody ArgumentsSet set, @PathVariable("id") int id) {
-		service.updateArguments(id, set);
+	public void updateArguments(@RequestBody Request set, @PathVariable("id") int id) {
+		service.updateRequest(id, set);
 	}
 
 	@RequestMapping(value = "/getMap/{id}", method = RequestMethod.GET)

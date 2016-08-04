@@ -8,16 +8,8 @@
 
 
 
-<div class="collapse in" id="add">
-	<div class="well well-sm addMap">
-		<div class="alert alert-warning fade in">
-			<div class="text-center">
-				<strong>Uwaga! </strong> Przed dodaniem nowej mapy przeczytaj
-				instrukcje <a href="#/info"><span
-					class="glyphicon glyphicon-arrow-right"></span> </a> <a class="close"
-					data-dismiss="alert" aria-label="close">&times;</a>
-			</div>
-		</div>
+<div class="collapse " id="add">
+	<div class="well well-sm ">
 
 		<form class="form-horizontal addMap" role="form">
 
@@ -140,6 +132,15 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="form-group">
+				<div class="col-md-offset-2 col-md-10">
+					<div class="checkbox">
+						<label><input type="checkbox"
+							ng-model="request.heuristic"> Policz rezultat w sposob heurystyczny</label>
+					</div>
+				</div>
+			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-2" for="email">Nowe haslo</label>
@@ -162,6 +163,15 @@
 			</div>
 		</form>
 
+		<div class="alert alert-warning fade in">
+			<div class="text-center">
+				<strong>Uwaga! </strong> Przed dodaniem nowej mapy przeczytaj
+				instrukcje <a href="#/info"><span
+					class="glyphicon glyphicon-arrow-right"></span> </a> <a class="close"
+					data-dismiss="alert" aria-label="close">&times;</a>
+			</div>
+		</div> 
+
 	</div>
 </div>
 
@@ -173,11 +183,9 @@
 
 			<div class="text-right">
 				<div class="btn-group btn-group-sm" role="group">
+ 
 
-					<a class='btn btn-default'>
-						<span class="glyphicon glyphicon-eye-open"></span>
-						<a class='btn btn-default'><span class="glyphicon glyphicon-pause"></span></a>
-					</a>
+					<a class='btn btn-default'><span class="glyphicon glyphicon-eye-open"></span></a>
 					 <a ng-class='getClass("btn btn-",map.progress)'
 						href="#/map/{{map.id}}">Wiecej <span
 						class="glyphicon glyphicon-search"></span></a>
@@ -195,3 +203,9 @@
 	</div>
 </div>
 
+<div class="text-center mapsTitle">
+	<div class="btn-group btn-group-sm" >
+	<button class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span> Wiecej</button>
+	<button class="btn btn-default">Wszystkie <span class="glyphicon glyphicon-chevron-down"></span></button>
+	</div>
+</div>

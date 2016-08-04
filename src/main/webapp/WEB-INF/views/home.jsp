@@ -57,10 +57,11 @@
 
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#/chat" data-toggle="tooltip"
-						data-placement="left" title="Chat"><span
+						data-placement="left" title="Chat">
+						<div class="hidden-lg hidden-md hidden-sm">Chat</div><span
 							class="glyphicon glyphicon-comment"></span></a></li>
 					<li><a href="#/info" data-toggle="tooltip"
-						data-placement="bottom" title="Info"><span
+						data-placement="bottom" title="Info"><div class="hidden-lg hidden-md hidden-sm">Info</div><span
 							class="glyphicon glyphicon-info-sign"></span></a></li>
 
 				</ul>

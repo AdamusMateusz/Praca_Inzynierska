@@ -97,6 +97,13 @@ app.controller('chatController', [
 			};
 
 			$scope.refresh = function() {
+				$http.get("chat/topics").then(
+						function(response) {
+							if (response.status == 200)
+									$scope.topics = JSON.parse(JSON
+											.stringify(response.data));
+						});
+				
 				$http.get("chat/messages/" + $scope.active).then(
 						function(response) {
 							if (response.status == 200) {

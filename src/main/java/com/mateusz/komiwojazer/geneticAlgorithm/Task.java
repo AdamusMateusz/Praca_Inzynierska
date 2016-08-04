@@ -1,11 +1,13 @@
 package com.mateusz.komiwojazer.geneticAlgorithm;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
 
 public class Task {
 
@@ -14,47 +16,41 @@ public class Task {
 	private final List<Route> parents;
 	private final boolean complete;
 
-	private Task(Task t) {
+	private Task(final Task t) {
 		this.cities = t.getCities();
 		this.distanceMatrix = t.getDistanceMatrix();
 		this.parents = t.getParents();
 		this.complete = t.isComplete();
 	}
 
-	private Task(List<City> cities, double[][] distanceMatrix, List<Route> parents, boolean complete) {
+	private Task(final List<City> cities,final double[][] distanceMatrix,final List<Route> parents,final boolean complete) {
 		this.cities = cities;
 		this.distanceMatrix = distanceMatrix;
 		this.parents = parents;
 		this.complete = complete;
 	}
 
-	private Task(List<City> cities, double[][] distanceMatrix, List<Route> parents) {
+	private Task(final List<City> cities,final double[][] distanceMatrix,final List<Route> parents) {
 		this.cities = cities;
 		this.distanceMatrix = distanceMatrix;
 		this.parents = parents;
 		this.complete = false;
 	}
 
-	@SuppressWarnings("unused")
-	private Task withParents(List<Route> parents, boolean complete) {
-		return new Task(cities, distanceMatrix, parents, complete);
-	}
-
-	@SuppressWarnings("unused")
-	private Task withParents(List<Route> parents) {
+	private Task withParents(final List<Route> parents) {
 		return new Task(cities, distanceMatrix, parents, complete);
 	}
 
 	/**
 	 * Crates and starts new Task
 	 * 
-	 * @param args
-	 *            - Arguments from client which provides necessary informations
+	 * @param args - Arguments from client which provides necessary informations
 	 * @return Newly created, probably not finished task
 	 */
 	
-	public static CompletableFuture<Task> produceTask(final ArgumentsSet args) {
+	public static CompletableFuture<Task> produceTask(final Request args) {
 		return CompletableFuture.supplyAsync(() -> {
+			
 			// Generate Cities
 			final List<City> cities = Stream
 					.generate(City::randomCity)
@@ -74,23 +70,74 @@ public class Task {
 					.forEach(j -> distanceMatrix[i][j] = f.apply(cities.get(i), cities.get(j))));
 
 
-			// Create and rate parents population
-			final List<Route> parents = Stream
+			// Create and rate  parents population
+			List<Route> parents = Stream
 					.generate(() -> args.getCitiesQuantity())
 					.parallel()
 					.limit(args.getParents())
 					.map(Route::generateRandomRoute)
 					.map(route -> route.rate(distanceMatrix))
 					.collect(Collectors.toList());
-
+			
+			parents = Route.sortRoutes(parents);
+		
 			// return new started task
 			return new Task(cities, distanceMatrix, parents);
+			
 		});
 	}
 
-	public Task proceed(final ArgumentsSet args) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Proceed started task
+	 * 
+	 * @param args - Arguments from client request which provides necessary informations
+	 * @return task
+	 */
+	public Task proceed(final Request args) {
+		
+		List<Route> kidsList = new ArrayList<>();;
+		int parentIndex = 0;
+		//TODO mozna zrobic to na Completable Future, wtedy jendo zadanie
+		//³adnie pyknie na wszystkich rdzeniach
+		do{
+		//cross
+			final Route r1 = parents
+					.get(parentIndex < parents.size() ? parentIndex++ : (int) ((Math.random() * parents.size()) - 1)); 
+			final Route r2 = parents.get((int) ((Math.random() * parents.size()) - 1));
+			
+			List<Route> kids = Route.cross(r1,r2,args);
+			kidsList.addAll(kids);
+			
+		}while(kidsList.size() < args.getKids());
+		
+		kidsList = kidsList.subList(0, args.getKids());
+		
+		//mutate
+		kidsList.replaceAll(route-> route.mutate(args));
+		
+		//Check change rate, and returns old task if needed
+		if ((kidsList.stream().filter(route -> route.isChanged()).count()) / (args.getKids()) < args.getChange())
+			return this;		
+		
+		//Rate population
+		kidsList.replaceAll(route->route.rate(distanceMatrix));
+		
+		//Add parents to population
+		if(args.isUseParents())
+			kidsList.addAll(parents);
+		
+		//Sort kids
+		kidsList = Route.sortRoutes(kidsList);
+		
+		//Selection
+		kidsList.subList(0, args.getParents());
+		
+		//Save minimal value of fitness function
+		if(args.isSaveFittingFunctionValue()){
+			FilesService.save(args.getId(),kidsList.get(0).getQuality());
+		}
+		
+		return this.withParents(kidsList);
 	}
 
 	public boolean isComplete() {
