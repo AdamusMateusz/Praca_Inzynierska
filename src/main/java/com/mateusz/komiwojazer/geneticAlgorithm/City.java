@@ -1,9 +1,12 @@
 package com.mateusz.komiwojazer.geneticAlgorithm;
 
-public class City implements Cloneable{
+import java.util.concurrent.ThreadLocalRandom;
+
+public class City{
 
 	private final double x;
 	private final double y;
+	public static final double radius = 0.025;
 
 	public City(double x, double y) {
 		this.x = x;
@@ -27,12 +30,7 @@ public class City implements Cloneable{
 	}
 	
 	public static City randomCity(){
-		return new City(Math.random(), Math.random());
-	}
-	
-	@Override
-	protected City clone(){
-		return new City(x,y);
+		return new City(ThreadLocalRandom.current().nextDouble(radius,1-radius),ThreadLocalRandom.current().nextDouble(radius*2,1-(radius*4)));
 	}
 	
 	@Override

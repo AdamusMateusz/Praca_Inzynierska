@@ -8,6 +8,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.mateusz.komiwojazer.utils.Request;
+
 public class Route implements Cloneable {
 
 	private final int[] cities;

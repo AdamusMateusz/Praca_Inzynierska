@@ -19,7 +19,7 @@
 				zadnych tematow<br> Dodaj wlasny temat <span
 				class="glyphicon glyphicon-arrow-down"></span>
 			</li>
-			<a ng-repeat="topic in topics" class="list-group-item"
+			<a ng-repeat="topic in topics" class="list-group-item topic-animate"
 				ng-click="setActive($index,topic.title)"><span class="badge">{{topic.messagesCount}}</span>
 				{{topic.title}}</a>
 
@@ -112,7 +112,7 @@
 			</div>
 		</div>
 
-		<div ng-repeat="message in messages">
+		<div ng-repeat="message in messages" class="message-animate">
 
 			<div class="panel panel-default">
 				<div class="panel-heading">

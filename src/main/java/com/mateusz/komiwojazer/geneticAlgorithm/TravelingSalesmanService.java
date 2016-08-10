@@ -1,13 +1,18 @@
 package com.mateusz.komiwojazer.geneticAlgorithm;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
@@ -15,13 +20,16 @@ import javax.annotation.PreDestroy;
 
 import org.springframework.stereotype.Service;
 
+import com.mateusz.komiwojazer.utils.MapOverwiew;
+import com.mateusz.komiwojazer.utils.Request;
+
 @Service
 public class TravelingSalesmanService {
 	private ExecutorService executor;
 	private ConcurrentHashMap<Integer, CompletableFuture<Task>> tasks;
 	private ConcurrentHashMap<Integer, Task> completedTasks;
 	private ConcurrentHashMap<Integer, Request> arguments;
-	private ConcurrentHashMap<Integer, MinAndMax> results;
+	//private ConcurrentHashMap<Integer, MinAndMax> results;
 	private AtomicInteger counter;
 
 	public TravelingSalesmanService() {
@@ -43,10 +51,11 @@ public class TravelingSalesmanService {
 	
 	private Integer startNewTask(int id, Request request) {
 		Integer key = (id == -1 ? counter.getAndIncrement() : id);
+		request.setId(key);
 		arguments.put(key, request);
 		CompletableFuture<Task> t = Task.produceTask(request);
 		tasks.put(key, t);
-		t.thenAccept(task -> results.put(key, MinAndMax.getMinAndMax(task)));
+		//t.thenAccept(task -> results.put(key, MinAndMax.getMinAndMax(task)));
 		return key;
 	}
 
@@ -71,29 +80,77 @@ public class TravelingSalesmanService {
 		return tasks.getOrDefault(id, CompletableFuture.completedFuture(completedTasks.get(id)));
 	}
 
-	public List<Task> getMapsOverview(int id, int quantity) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<MapOverwiew> getAllMapsOverview() {
+		List<MapOverwiew> maps = new ArrayList<>();
+
+		Set<Entry<Integer, Request>> entrySet = arguments.entrySet();
+		
+		for (Entry<Integer, Request> entry : entrySet) {
+
+			maps.add(produceSingleOverwiew(entry.getValue(), entry.getKey()));
+			
+		}
+		
+		maps.sort((m1,m2)-> Integer.compare(m1.getId(),m2.getId()));
+		return maps;
+	}
+	
+	public List<MapOverwiew> getMapsOverview(int id) {
+		List<MapOverwiew> result= new ArrayList<>();
+		
+		while(++id <= counter.get() && result.size() <= 5){
+			final Request request = arguments.get(id);
+			if(request != null){
+				result.add(produceSingleOverwiew(request, id));
+			}
+		}
+		
+		return result;
+	}
+	
+	private MapOverwiew produceSingleOverwiew(Request r, int id){
+		boolean complete = false;
+		boolean running = true;
+		double quality =-1;
+		List<City> cities = new ArrayList<>();
+		try {
+			 CompletableFuture<Task> completableFuture = tasks.get(id);
+			 Task task;
+			 if(completableFuture != null){
+				task = completableFuture.get(1, TimeUnit.SECONDS);
+			}
+			else{
+				task = completedTasks.get(id);
+				running = false;
+			}
+					
+			quality = task.getQuality();
+			complete = task.isComplete();
+			cities = task.getCities();
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			e.printStackTrace();
+		}
+		return new MapOverwiew(r, complete,running,cities,quality);
 	}
 
 	@PostConstruct
 	public void construct() {
 
 		threadFactory().newThread(() -> {
-			// TODO zrobic cos, zeby ten watek ciagle nie krecil sie bez sensu
-			// na pelnych obrotach
 
-			while (true) {
-				if (tasks.isEmpty()) {
-					try {
-						TimeUnit.SECONDS.sleep(10);
-					} catch (Exception e) {
-						e.printStackTrace();
+			try {
+				while (true) {
+					if (tasks.isEmpty()) {
+						TimeUnit.SECONDS.sleep(1);
+					} else {
+						executeTasks();
+						TimeUnit.MILLISECONDS.sleep(50);
 					}
-				} else {
-					executeTasks();
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+
 		}).start();
 
 	}
@@ -109,13 +166,13 @@ public class TravelingSalesmanService {
 					if (task.isComplete()) {
 						completedTasks.put(entry.getKey(), entry.getValue().get());
 						tasks.remove(entry.getKey());
-					} else {
-						tasks.put(entry.getKey(), CompletableFuture
+					} else {		
+						
+						tasks.put(entry.getKey(),CompletableFuture
 								.supplyAsync(() -> task.proceed(arguments.get(entry.getKey())), executor));
 					}
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
@@ -147,8 +204,8 @@ public class TravelingSalesmanService {
 		};
 	}
 
-	public List<Task> getAllMapsOverview() {
-		// TODO Auto-generated method stub
-		return null;
+	public Request getRequest(int id) {
+		return arguments.get(id);
 	}
+
 }

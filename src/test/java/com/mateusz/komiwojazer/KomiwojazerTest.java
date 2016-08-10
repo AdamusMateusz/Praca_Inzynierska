@@ -14,10 +14,10 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
-import com.mateusz.komiwojazer.geneticAlgorithm.Request;
 import com.mateusz.komiwojazer.geneticAlgorithm.MinAndMax;
 import com.mateusz.komiwojazer.geneticAlgorithm.Route;
 import com.mateusz.komiwojazer.geneticAlgorithm.Task;
+import com.mateusz.komiwojazer.utils.Request;
 
 public class KomiwojazerTest {
 

@@ -8,8 +8,9 @@
 </div>
 
 <div class="tabs">
-<tabs> <pane heading="Mapa">
-<div class="well">
+<tabs> 
+<pane heading="Mapa">
+
 
 	<div class="row">
 		<div class="col-lg-12">
@@ -22,21 +23,41 @@
 					max="20">
 				<div class="input-group-addon">{{seconds}}</div>
 			</div>
-
-			<canvas id="map"></canvas>
-		</div>
+</div>
 	</div>
-</div>
-</pane>
- <pane heading="Wykresy">
-		<div class="well">
-			<canvas id="chart" ></canvas>
-		</div>
-	</pane>
-<pane heading="Tabela odleglosci">
-<div class="well">
-Tabela odleglosci
-</div>
+	<div class="row">
+		<div class="col-lg-12">
+				<div class="svg-container">
+					<svg version="1.1" style="margin-top: 15px;" viewBox="0 0 1 1"
+						preserveAspectRatio="xMinYMin meet" class="svg-content">
+				
+				
+				<polyline ng-attr-points="{{points}}" style="fill:none"/>
+				<circle ng-repeat="c in map.cities" ng-attr-cx="{{c.x}}" ng-attr-cy="{{c.y/2}}" r="0.024"/>
+				<text ng-if="showNumbers" font-family="Verdana" font-size="0.02" ng-repeat="c in map.cities" ng-attr-x="{{c.x-( $index < 10? 0.005 : 0.01)}}" ng-attr-y="{{(c.y/2)+0.005}}" fill="#455a64">{{$index}}</text>
+				
+					</svg>
+				</div>
+			</div>
+	</div>
+
+<label><input type="checkbox" ng-model="showNumbers"> Pokaz numery</label>		
+
+
+
+<div class="table-responsive">
+	<table class="table table-hover">
+	<thead>
+		<tr>
+			<td>Dlugosc trasy</td><td>Kolejnosc miast</td>
+		</tr>
+	</thead>
+	<tr ng-repeat="row in map.parents" ng-class="{'info': $index == selectedRoute}" ng-click="selectRoute($index)">
+		<td>{{row.quality == -1 ? -1 :(row.quality * 1000 | number :2)}}</td>
+		<td>{{row.cities}}</td>
+	</tr>
+	</table>
+	</div>
 </pane>
 	<pane heading="Ustawienia">
 		<div class="well">
@@ -171,7 +192,34 @@ Tabela odleglosci
 	</form>
 </div>
 	</pane>
+<pane heading="Tabela odleglosci">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+			<thead>
+					<tr class="info">
+						<td></td>
+						<td ng-repeat="e in map.distanceMatrix[0]">{{$index}}</td>
+					</tr>
+			</thead>
+				<tr ng-repeat="element in map.distanceMatrix">
+					<td>{{$index}}</td>
+					<td ng-repeat="e in element">{{e * 1000| number : 2}}</td>
+				</tr>
+			</table>
+		</div>
+</pane>
+ <pane heading="Wykres wartosci funkcji oceny" ng-if="request.saveFittingFunctionValue">
 
+			<div class="svg-container">
+					<svg version="1.1" style="margin-top: 15px;" viewBox="0 0 1000 500"
+						preserveAspectRatio="xMinYMin meet" class="svg-content">
+				
+					<line x1="0" y1="0" x2="200" y2="200" />				
+				
 
+					</svg>
+				</div>
+
+	</pane>
  </tabs>
  </div>

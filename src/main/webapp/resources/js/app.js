@@ -1,4 +1,4 @@
-angular.module("myApp", [ 'controllers', 'ngRoute' ,'ui.bootstrap' ]).config(
+angular.module("myApp", [ 'controllers', 'ngRoute' ,'ui.bootstrap','ngAnimate' ]).config(
 		function($routeProvider) {
 			$("[data-toggle='tooltip']").tooltip();
 			

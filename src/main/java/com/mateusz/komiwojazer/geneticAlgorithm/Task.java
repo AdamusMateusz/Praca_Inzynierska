@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import com.mateusz.komiwojazer.utils.FilesService;
+import com.mateusz.komiwojazer.utils.Request;
+
 
 public class Task {
 
@@ -94,7 +97,6 @@ public class Task {
 	 * @return task
 	 */
 	public Task proceed(final Request args) {
-		
 		List<Route> kidsList = new ArrayList<>();;
 		int parentIndex = 0;
 		//TODO mozna zrobic to na Completable Future, wtedy jendo zadanie
@@ -116,8 +118,10 @@ public class Task {
 		kidsList.replaceAll(route-> route.mutate(args));
 		
 		//Check change rate, and returns old task if needed
-		if ((kidsList.stream().filter(route -> route.isChanged()).count()) / (args.getKids()) < args.getChange())
+		double ratio = ((double)(kidsList.stream().filter(route -> route.isChanged()).count()) / (double)(args.getKids())*100.0);
+		if (ratio < args.getChange()){
 			return this;		
+		}
 		
 		//Rate population
 		kidsList.replaceAll(route->route.rate(distanceMatrix));
@@ -130,13 +134,13 @@ public class Task {
 		kidsList = Route.sortRoutes(kidsList);
 		
 		//Selection
-		kidsList.subList(0, args.getParents());
+		kidsList = kidsList.subList(0, args.getParents());
 		
 		//Save minimal value of fitness function
 		if(args.isSaveFittingFunctionValue()){
 			FilesService.save(args.getId(),kidsList.get(0).getQuality());
 		}
-		
+
 		return this.withParents(kidsList);
 	}
 
@@ -154,6 +158,10 @@ public class Task {
 
 	public List<Route> getParents() {
 		return parents;
+	}
+	
+	public double getQuality(){
+		return parents.get(0).getQuality();
 	}
 
 }

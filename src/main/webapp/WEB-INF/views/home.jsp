@@ -10,9 +10,11 @@
 
 <!-- AngularJS -->
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
+	<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
 
 
 <!-- Bootstrap -->
@@ -32,7 +34,6 @@
 <script type="text/javascript"
 	src="<c:url value="/resources/js/app.js" />"></script>
 <script src="<c:url value="/resources/js/controllers.js" />"></script>
-<script src="<c:url value="/resources/js/drawings.js" />"></script>
 <script src="<c:url value="/resources/js/model.js" />"></script>
 
 </head>
