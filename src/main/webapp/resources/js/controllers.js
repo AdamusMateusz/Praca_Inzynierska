@@ -70,20 +70,28 @@ app.controller('mapsController', [ '$scope', '$http',
 
 app.controller('mapController', [ '$scope', '$http','$routeParams',
 		function($scope, $http, $routeParams) {
+		
 			$scope.id = $routeParams.id;
-
-			$scope.request = {
-					quantity : 5,
-					parents : 10,
-					kids : 20,
-					change : 20,
-					crossingGene : 50,
-					crossingChromosome : 50,
-					mutationGene : 5,
-					mutationChromosome : 5,
-					useParents : true
-				};
+			$scope.running = true;
+			$scope.showPositive = {value:true};
+			$scope.pointsOfFitting ="";
+			$scope.points = "";
+			$scope.seconds = 5;
+			$scope.selectedRoute = 0;
+			$scope.showNumbers = false;
+			$scope.fittingValues= [100,75,50,25];
+			$scope.svg = {minimum: {txt:0,h:50}};
+			$scope.svg.lines=[{txt:100,h:10/2},
+						{txt:75,h:(((1000 - (10/2)) - (50))/2)/4},
+						{txt:50,h:(((1000 - (10/2)) - (50))/2)/2},
+						{txt:25,h:3*(((1000 - (10/2)) - (50))/2)/4},
+	                    {txt:0,h:(((1000 - (10/2)) - (50))/2)}];
+		
+			$scope.$watch('showPositive.value',function(){
+				$scope.setPointsofFittingFunction();
+			});
 			
+
 			$http.get("komiwojazer/getMap/" + $scope.id).then(
 					function(response) {
 						if (response.status == 200) {
@@ -91,6 +99,20 @@ app.controller('mapController', [ '$scope', '$http','$routeParams',
 									.stringify(response.data));
 							//Sets points of route
 							$scope.setPoints();
+						}
+					});
+			
+			$http.get("komiwojazer/getFittingFunctionValues/" + $scope.id).then(
+					function(response) {
+						if (response.status == 200) {
+							$scope.fittingValues = JSON.parse(JSON
+									.stringify(response.data));
+							//Sets points of route
+							for(var i=0; i < $scope.fittingValues.length; i++){
+								if($scope.fittingValues[i] != -1)
+									$scope.fittingValues[i] *=1000;
+							}
+							$scope.setPointsofFittingFunction();
 						}
 					});
 			
@@ -102,29 +124,109 @@ app.controller('mapController', [ '$scope', '$http','$routeParams',
 						}
 					});
 			
-			$scope.points = "";
-			$scope.seconds = 5;
-			$scope.selectedRoute = 0;
-			$scope.showNumbers = false;
+			$http.get("komiwojazer/isRunningMap/" + $scope.id).then(
+					function(response) {
+						if (response.status == 200) {
+							$scope.running = JSON.parse(JSON
+									.stringify(response.data));
+						}
+					});		
+			
 			$scope.setPoints = function(){
-				var s = "";
 				
-				$scope.map.parents[$scope.selectedRoute].cities
-				.forEach(function(elem){
-					s = s+ $scope.map.cities[elem].x +","+$scope.map.cities[elem].y/2+" ";
+				var cords = $scope.map.cities;
+				var cities = $scope.map.parents[$scope.selectedRoute].cities
 				
-				});
+				var s = "M " + cords[cities[0]].x + " " + cords[cities[0]].y/2+" ";
 				
-				s += $scope.map.cities[$scope.map.parents[$scope.selectedRoute].cities[0]].x;
-				s += ","+$scope.map.cities[$scope.map.parents[$scope.selectedRoute].cities[0]].y/2+" ";
+				for(var i=1; i< cities.length;i++){
+					s+= "L " + cords[cities[i]].x + " " + cords[cities[i]].y/2+" ";
+				}
 				
-				$scope.points = s;
+				$scope.points = s + "Z";
 			};
+			
+			$scope.getY = function(value){
+				return 0;
+			}
+			
+			$scope.setPointsofFittingFunction = function(){
+				var elements = $scope.fittingValues;
+				
+				if($scope.showPositive.value){
+					elements = elements.slice(elements.lastIndexOf(-1)+1);
+				}
+				
+				var max = Math.max.apply(null,elements);
+				var min = $scope.showPositive.value? 0 : Math.min.apply(null,elements);
+				
+				$scope.svg.lines[0].txt = max;
+				$scope.svg.lines[1].txt = 3*(max+min)/4;
+				$scope.svg.lines[2].txt = (max+min)/2;
+				$scope.svg.lines[3].txt = (max+min)/4;
+				$scope.svg.lines[4].txt = min;
+				
+				var left = 50;
+				var	right = 995;
+				var	top = 10/2;
+				var	bottom = ((1000 - (10/2)) - (50))/2;
+				var	jmpX = (right-left)/(elements.length-1);
+				var positionX = left;
+				var range = max - min;
+				var jmpY = (bottom-top)/(range-1);
+
+				$scope.getY = function(value){
+					return Math.abs((bottom+top) - (top + (jmpY * value)));
+				};
+				
+				$scope.svg.minimum.txt = elements[elements.length-1];
+				$scope.svg.minimum.h = $scope.getY(elements[elements.length-1]);
+				
+				var s = "M " + positionX + " " + bottom +" ";
+				
+				for(var i = 0; i< elements.length; i++){
+					s+= "L " + positionX + " " + $scope.getY(elements[i]);
+					positionX += jmpX;
+				}
+				
+				s+= "L " + right + " " + bottom;
+				$scope.pointsOfFitting = s + " Z";
+				
+			}
+			
+			
+			$scope.stop = function(){
+				$http.patch("komiwojazer/stopMap/" + $scope.id).then(
+						function(response) {
+							if (response.status == 200) {
+								var stopped = JSON.parse(JSON
+										.stringify(response.data));
+								if(stopped){
+									$scope.running = false;
+								}
+								
+							}
+						});
+			};
+			
+			$scope.resume = function(){
+				$http.patch("komiwojazer/resumeMap/" + $scope.id).then(
+						function(response) {
+							if (response.status == 200) {
+								var running = JSON.parse(JSON
+										.stringify(response.data));
+								if(running){
+									$scope.running = true;
+								}
+							}
+						});
+			};
+			
 			$scope.selectRoute = function(index){
 				$scope.selectedRoute = index;
 				$scope.setPoints();
 			};
-			
+		
 			
 		} ]);
 

@@ -23,14 +23,14 @@ public class Request {
 	public Request(int id, int quantity, int parents, int kids, byte crossingGene, byte crossingChromosome,
 			float mutationGene, float mutationChromosome, byte change, boolean useParents, boolean heuristic, boolean saveFittingFunctionValue, String password) {
 		this.id=id;
-		this.citiesQuantity = (quantity < 5 && quantity <100) ? 5 : quantity;
+		this.citiesQuantity = (quantity < 5 || quantity >100) ? 5 : quantity;
 		this.parents = parents < 2 ? 2 : parents;
 		this.kids = kids < 2 ? 2 : parents;
-		this.crossingGene = (crossingGene < 0 && crossingGene > 100) ? -1 : crossingGene;
-		this.crossingChromosome = (crossingChromosome < 0 && crossingChromosome > 100) ? -1 : crossingChromosome;
-		this.mutationGene = (mutationGene < 0 && mutationGene > 10) ? -1 : mutationGene;
-		this.mutationChromosome = (mutationChromosome < 0 && mutationChromosome > 10) ? -1 : mutationChromosome;
-		this.change = (change < 0 && change > 100) ? -1 : change;
+		this.crossingGene = (crossingGene < 0 || crossingGene > 100) ? -1 : crossingGene;
+		this.crossingChromosome = (crossingChromosome < 0 || crossingChromosome > 100) ? -1 : crossingChromosome;
+		this.mutationGene = (mutationGene < 0 || mutationGene > 10) ? -1 : mutationGene;
+		this.mutationChromosome = (mutationChromosome < 0 || mutationChromosome > 10) ? -1 : mutationChromosome;
+		this.change = (change < 0 || change > 100) ? -1 : change;
 		this.useParents = useParents;
 		this.heuristic = heuristic;
 		this.saveFittingFunctionValue = saveFittingFunctionValue;
@@ -60,7 +60,7 @@ public class Request {
 	public int getCrossingGene() {
 		return crossingGene != -1 ? crossingGene :  ThreadLocalRandom.current().nextInt(0,101);
 	}
-	public boolean hasCrossingGenePossibilities(){
+	public boolean hasCrossingGenePossibility(){
 		return ThreadLocalRandom.current().nextInt(0,101) <= getCrossingGene();
 	}
 
@@ -68,7 +68,7 @@ public class Request {
 		return crossingChromosome != -1 ? crossingChromosome : ThreadLocalRandom.current().nextInt(0,101);
 	}
 
-	public boolean hasCrossingChromosomePossibilities(){
+	public boolean hasCrossingChromosomePossibility(){
 		return ThreadLocalRandom.current().nextInt(0,101) <= getCrossingChromosome();
 	}
 	
@@ -76,7 +76,7 @@ public class Request {
 		return mutationGene != -1 ? mutationGene : (float) ThreadLocalRandom.current().nextDouble(0,10);
 	}
 	
-	public boolean hasMutationGenePossibilities(){
+	public boolean hasMutationGenePossibility(){
 		return ThreadLocalRandom.current().nextDouble(0,10) <= getMutationGene();
 	}
 
@@ -84,7 +84,7 @@ public class Request {
 		return mutationChromosome != -1 ? mutationChromosome : (float) ThreadLocalRandom.current().nextDouble(0,1);
 	}
 	
-	public boolean hasMutationChromosomePossibilities(){
+	public boolean hasMutationChromosomePossibility(){
 		return ThreadLocalRandom.current().nextDouble(0,10) <= getMutationChromosome();
 	}
 

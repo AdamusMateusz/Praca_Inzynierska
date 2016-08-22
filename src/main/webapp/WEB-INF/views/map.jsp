@@ -2,7 +2,7 @@
 <div class="row">
 	<div class="hidden-lg hidden-md alert alert-danger fade in">
 		<span class="glyphicon glyphicon-exclamation-sign"></span> Strona moze
-		nie byc wyswietlana poprawnie przy tak niskich rozdzielczosciach <a
+		nie byc wyswietlana poprawnie przy tak niskiej rozdzielczosci <a
 			class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	</div>
 </div>
@@ -32,9 +32,9 @@
 						preserveAspectRatio="xMinYMin meet" class="svg-content">
 				
 				
-				<polyline ng-attr-points="{{points}}" style="fill:none"/>
-				<circle ng-repeat="c in map.cities" ng-attr-cx="{{c.x}}" ng-attr-cy="{{c.y/2}}" r="0.024"/>
-				<text ng-if="showNumbers" font-family="Verdana" font-size="0.02" ng-repeat="c in map.cities" ng-attr-x="{{c.x-( $index < 10? 0.005 : 0.01)}}" ng-attr-y="{{(c.y/2)+0.005}}" fill="#455a64">{{$index}}</text>
+				<path ng-attr-d="{{points}}" style="fill:none"/>
+				<circle ng-repeat="c in map.cities" ng-attr-cx="{{c.x}}" ng-attr-cy="{{c.y/2}}" r="0.02" style="transform-origin:{{c.x}}px {{c.y/2}}px" class="animated-circle"/>
+				<text ng-if="showNumbers" font-size="0.02" ng-repeat="c in map.cities" ng-attr-x="{{c.x-( $index < 10? 0.005 : 0.01)}}" ng-attr-y="{{(c.y/2)+0.005}}" fill="#455a64">{{$index}}</text>
 				
 					</svg>
 				</div>
@@ -167,6 +167,8 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- Buttons -->
 
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
@@ -174,13 +176,13 @@
 				<button type="submit" class="btn btn-danger">
 						Usun <span class="glyphicon glyphicon-trash"></span>
 					</button>
-					<button type="submit" class="btn btn-warning">
+					<button ng-if="running" ng-click="stop()" type="submit" class="btn btn-warning">
 						<span class="glyphicon glyphicon-pause"></span>
 					</button>
-					<button type="submit" class="btn btn-warning">
+					<button ng-if="!running" ng-click="resume()" type="submit" class="btn btn-warning">
 						<span class="glyphicon glyphicon-play"></span>
 					</button>
-					<button type="submit" class="btn btn-warning">
+					<button type="submit" class="btn btn-warning" disabled="true">
 					 <span class="glyphicon glyphicon-refresh"></span>
 					</button>
 					<button type="submit" class="btn btn-success">
@@ -210,16 +212,25 @@
 </pane>
  <pane heading="Wykres wartosci funkcji oceny" ng-if="request.saveFittingFunctionValue">
 
-			<div class="svg-container">
-					<svg version="1.1" style="margin-top: 15px;" viewBox="0 0 1000 500"
-						preserveAspectRatio="xMinYMin meet" class="svg-content">
+	<div class="svg-container">
+		<svg version="1.1" style="margin-top: 15px;" viewBox="0 0 1000 1000"
+				preserveAspectRatio="xMinYMin meet" class="svg-content">
 				
-					<line x1="0" y1="0" x2="200" y2="200" />				
-				
-
-					</svg>
-				</div>
-
-	</pane>
+			<g ng-repeat="elem in svg.lines">
+				<line x1="50" ng-attr-y1="{{elem.h}}" x2="995" ng-attr-y2="{{elem.h}}"/>
+				<text font-size="10" x="0" ng-attr-y="{{elem.h+2.5}}" fill="#455a64">{{elem.txt|number :0}}</text>
+			</g>
+			<path class="fitting" ng-attr-d="{{pointsOfFitting}}"/>
+			<g >
+				<line class="minimum" x1="50" ng-attr-y1="{{svg.minimum.h}}" x2="995" ng-attr-y2="{{svg.minimum.h}}"/>
+				<text font-size="10" class="minimum" x="55" ng-attr-y="{{svg.minimum.h-5}}">{{svg.minimum.txt|number :0}}</text>
+			</g>
+			
+			
+		</svg>
+	</div>
+	
+	<label>Zacznij od dodatnich wartosci <input type="checkbox" ng-model="showPositive.value"></label>
+</pane>
  </tabs>
  </div>

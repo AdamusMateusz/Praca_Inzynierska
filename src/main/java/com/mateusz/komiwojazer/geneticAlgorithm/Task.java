@@ -1,6 +1,7 @@
 package com.mateusz.komiwojazer.geneticAlgorithm;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
@@ -54,21 +55,38 @@ public class Task {
 	public static CompletableFuture<Task> produceTask(final Request args) {
 		return CompletableFuture.supplyAsync(() -> {
 			
+			// Returns length of a vector
+			final BiFunction<City, City, Double> f = (c1, c2) -> 
+			 Math.sqrt(Math.pow(c2.getX() - c1.getX(), 2) + Math.pow(c2.getY() - c1.getY(), 2));
+			
 			// Generate Cities
-			final List<City> cities = Stream
-					.generate(City::randomCity)
-					.limit(args.getCitiesQuantity())
-					.collect(Collectors.toList());
-
+			final List<City> cities = new LinkedList<>();
+			
+			while(cities.size() < args.getCitiesQuantity()){
+				
+				final City c = City.randomCity();
+				
+				int j = 0;
+				
+				while (j < cities.size()) {
+					final City tmp = cities.get(j);
+					if (f.apply(tmp, c) < City.DIAMETER * 2){
+						break;
+					}
+					else{
+						j++;
+					}
+				}
+				if (j == cities.size()) {
+					cities.add(c);
+				}
+				
+			}
+			
 			// Calculate DistanceMatrix
 			final int quantity = args.getCitiesQuantity();
 			final double[][] distanceMatrix = new double[quantity][quantity];
-
-			// Returns length of a vector
-			final BiFunction<City, City, Double> f = (c1, c2) -> {
-				return Math.sqrt(Math.pow(c2.getX() - c1.getX(), 2) + Math.pow(c2.getY() - c1.getY(), 2));
-			};
-
+			
 			IntStream.range(0, quantity).parallel().forEach(i -> IntStream.range(0, quantity)
 					.forEach(j -> distanceMatrix[i][j] = f.apply(cities.get(i), cities.get(j))));
 
@@ -97,22 +115,29 @@ public class Task {
 	 * @return task
 	 */
 	public Task proceed(final Request args) {
-		List<Route> kidsList = new ArrayList<>();;
+		
+		List<CompletableFuture<List<Route>>> futureKidsList = new ArrayList<>();;
 		int parentIndex = 0;
-		//TODO mozna zrobic to na Completable Future, wtedy jendo zadanie
-		//³adnie pyknie na wszystkich rdzeniach
+
 		do{
 		//cross
 			final Route r1 = parents
 					.get(parentIndex < parents.size() ? parentIndex++ : (int) ((Math.random() * parents.size()) - 1)); 
 			final Route r2 = parents.get((int) ((Math.random() * parents.size()) - 1));
 			
-			List<Route> kids = Route.cross(r1,r2,args);
-			kidsList.addAll(kids);
+			futureKidsList.add(CompletableFuture.supplyAsync(()->Route.cross(r1,r2,args)));
 			
-		}while(kidsList.size() < args.getKids());
+		}while(futureKidsList.size() /2 < args.getKids());
 		
-		kidsList = kidsList.subList(0, args.getKids());
+		List<Route> kidsList = futureKidsList.stream().flatMap(future-> {
+			try {
+				return future.get().stream();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}).collect(Collectors.toList()).subList(0, args.getKids());
+
 		
 		//mutate
 		kidsList.replaceAll(route-> route.mutate(args));

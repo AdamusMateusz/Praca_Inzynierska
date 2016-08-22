@@ -95,7 +95,7 @@ a.topic-animate.ng-enter-active{
 }
 
 .message-animate.ng-enter-stagger{
-	transition-delay:0.07s;
+	transition-delay:0.1s;
 }
 
 .message-animate.ng-enter-active{
@@ -113,42 +113,55 @@ a.topic-animate.ng-enter-active{
 	transform: scaleY(1);
 }
 
-polyline{
+path{
 	stroke:#31708f;
 	fill:#d9edf7;
 	stroke-width:0.002;
+}
+
+path.fitting{
+	fill-opacity:.8;
+	stroke-width:1.5;
 }
 
 circle{
 	stroke:#455a64;
 	fill:#d9edf7;
 	stroke-width:0.002;
-	
+}
+
+circle.animated-circle{
+	transition: transform .4s, fill-opacity .4s linear;
 }
 
 circle:hover{
-	fill-opacity:0.7;
+	fill-opacity:.6;
 }
 
-circle.ng-enter{
-	transition: all .3s linear;
+circle.animated-circle.ng-enter{
+	fill-opacity:0;
 	transform: scale(0,0);
 }
 
-circle.ng-enter-stagger{
-	transition-delay:0.01s;
-}
-
-circle.ng-enter-active{
+circle.animated-circle.ng-enter-active{
 	transform: scale(1,1);
 }
 
+
 text.ng-enter{
-	animation: txt 0.25s;	
+	animation: txt 0.25s linear;	
 }
 
 text.ng-leave{
-	animation: txt 0.25s reverse;	
+	animation: txt 0.25s linear reverse;	
+}
+
+text{
+	font-family: Verdana;
+}
+
+text.minimum{
+	fill:#31708f;
 }
 
 @keyframes txt{
@@ -162,6 +175,10 @@ text.ng-leave{
 
 line{
 	stroke:#455a64;
-	stroke-width:5;
+	stroke-width:.4;
 	stroke-opacity:1;
+}
+
+line.minimum{
+	stroke:#31708f;
 }

@@ -53,6 +53,19 @@ public class Route implements Cloneable {
 
 		return this.withRate(r + distanceMatrix[0][length - 1]);
 	}
+	
+	public static double rate(final int[] route, final double[][] distanceMatrix) {
+		final int length = route.length;
+
+		for (int i = 0; i < length - 1; i++)
+			for (int j = i + 1; j < length; j++)
+				if (route[i] == route[j])
+					return -1;
+
+		final double r = IntStream.range(1, length).mapToDouble(i -> distanceMatrix[route[i - 1]][route[i]]).sum();
+
+		return r + distanceMatrix[0][length - 1];
+	}
 
 	public int[] getCities() {
 		return cities;
@@ -94,14 +107,14 @@ public class Route implements Cloneable {
 		final int[] oldCities1 = r1.getCities();
 		final int[] oldCities2 = r2.getCities();
 		
-		if(args.hasCrossingChromosomePossibilities()){
+		if(args.hasCrossingChromosomePossibility()){
 			
 			final int[] cities1 = new int[oldCities1.length];
 			final int[] cities2 = new int[oldCities2.length];
 			boolean changed = false;
 			
 			for(int i = 0; i < cities1.length; i++){
-				if(args.hasCrossingGenePossibilities()){
+				if(args.hasCrossingGenePossibility()){
 					changed = true;
 					cities1[i]= oldCities2[i];
 					cities2[i]= oldCities1[i];
@@ -119,12 +132,12 @@ public class Route implements Cloneable {
 
 	public Route mutate(Request args) {
 
-		if(args.hasMutationChromosomePossibilities()){
+		if(args.hasMutationChromosomePossibility()){
 			final int[] newCities = new int[cities.length];
 			boolean changed = false;
 			
 			for(int i =0; i < cities.length; i++){
-				if(args.hasMutationGenePossibilities()){
+				if(args.hasMutationGenePossibility()){
 					changed = true;
 					newCities[i] = ThreadLocalRandom.current().nextInt(cities.length);
 

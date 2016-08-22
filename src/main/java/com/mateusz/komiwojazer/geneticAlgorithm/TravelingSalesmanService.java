@@ -3,6 +3,7 @@ package com.mateusz.komiwojazer.geneticAlgorithm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,15 +26,14 @@ import com.mateusz.komiwojazer.utils.Request;
 
 @Service
 public class TravelingSalesmanService {
-	private ExecutorService executor;
 	private ConcurrentHashMap<Integer, CompletableFuture<Task>> tasks;
 	private ConcurrentHashMap<Integer, Task> completedTasks;
 	private ConcurrentHashMap<Integer, Request> arguments;
-	//private ConcurrentHashMap<Integer, MinAndMax> results;
+	//private ConcurrentHashMap<Integer, Double> results;
 	private AtomicInteger counter;
-
+	private ExecutorService executor;
+	
 	public TravelingSalesmanService() {
-
 		// inicjowanie nowych zmiennych
 		tasks = new ConcurrentHashMap<>();
 		completedTasks = new ConcurrentHashMap<>();
@@ -69,11 +69,6 @@ public class TravelingSalesmanService {
 			else
 				arguments.put(id, set);
 		}
-	}
-
-	public void delete(int id, String password) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public Future<Task> getMap(int id) {
@@ -141,7 +136,7 @@ public class TravelingSalesmanService {
 			try {
 				while (true) {
 					if (tasks.isEmpty()) {
-						TimeUnit.SECONDS.sleep(1);
+						TimeUnit.SECONDS.sleep(3);
 					} else {
 						executeTasks();
 						TimeUnit.MILLISECONDS.sleep(50);
@@ -153,6 +148,17 @@ public class TravelingSalesmanService {
 
 		}).start();
 
+	}
+
+	private ThreadFactory threadFactory() {
+		// tworzy fabryke watkow
+		return r -> {
+			Thread t = new Thread(r);
+			// gdy program konczy dzialanie, to watki nie powinny blokowac
+			// zamykania programu
+			t.setDaemon(true);
+			return t;
+		};
 	}
 
 	private void executeTasks() {
@@ -193,19 +199,52 @@ public class TravelingSalesmanService {
 		}
 	}
 
-	private ThreadFactory threadFactory() {
-		// tworzy fabryke fatkow
-		return r -> {
-			Thread t = new Thread(r);
-			// gdy program konczy dzialanie, to watki nie powinny blokowac
-			// zamykania programu
-			t.setDaemon(true);
-			return t;
-		};
-	}
-
 	public Request getRequest(int id) {
 		return arguments.get(id);
+	}
+
+	/**
+	 * @param id identifier of task
+	 * @return true if some task is stopped, false otherwise
+	 */
+	public boolean stop(int id) {
+		final CompletableFuture<Task> completableFuture = tasks.remove(id);
+		
+		if (Objects.nonNull(completableFuture)) {
+			completableFuture.thenAccept(task -> completedTasks.put(id, task));
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * @param id identifier of task
+	 * @return true if some task is resumed, false otherwise
+	 */
+	public boolean resume(int id) {
+		Task removed = completedTasks.remove(id);
+		
+		if(Objects.nonNull(removed)){
+			tasks.put(id,CompletableFuture.completedFuture(removed));
+			return true;
+		}
+		
+		return false;
+	}
+
+	public boolean delete(int id, String password) {
+		//password needed
+		Object ob = completedTasks.get(id);
+		
+		if(Objects.isNull(ob)){
+			tasks.remove(id);
+		}
+		return true;
+	}
+	
+	public boolean isRunning(int id){
+		return Objects.nonNull(tasks.get(id));
 	}
 
 }

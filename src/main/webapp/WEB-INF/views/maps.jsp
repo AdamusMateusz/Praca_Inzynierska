@@ -187,19 +187,19 @@
 		<div class="row">
 
 
-				<div class="col-md-6">
+				<div class="col-md-7">
 					<div class="svg-container">
 						<svg version="1.1" style="margin-top: 15px;" viewBox="0 0 1 2"
 							preserveAspectRatio="xMinYMin meet" class="svg-content">
 				
-				<circle ng-repeat="c in map.cities" r="0.024" ng-attr-cx="{{c.x}}" ng-attr-cy="{{c.y/2}}" />
+				<circle ng-repeat="c in map.cities" r="0.02" ng-attr-cx="{{c.x}}" ng-attr-cy="{{c.y/2}}" />
 				
 					</svg>
 					</div>
 
 				</div>
 
-				<div class="col-md-6">
+				<div class="col-md-5">
 				
 					<span class="glyphicon glyphicon-globe"></span> Ilosc miast: <span class="badge">{{map.cities.length}}</span><br>
 					<span class="glyphicon glyphicon-road"></span> Ilosc rodzicow: <span class="badge">{{map.parents}}</span><br>
@@ -234,6 +234,8 @@
 
 	</div>
 </div>
+
+<div ng-if="maps.length == 0 " class="alert alert-info text-center"><span class="glyphicon glyphicon-info-sign"></span> Obenie nie ma zadnych map do wyswietlenia. Sproboj dodac wlasna <span class=" glyphicon glyphicon-chevron-up"></span></div>
 
 <div class="text-center mapsTitle">
 	<div class="btn-group btn-group-sm" >
