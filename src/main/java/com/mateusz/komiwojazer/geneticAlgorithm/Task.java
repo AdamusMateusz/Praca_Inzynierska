@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.mateusz.komiwojazer.utils.FilesService;
+import com.mateusz.komiwojazer.utils.FittingValueService;
+import com.mateusz.komiwojazer.utils.Minimum;
 import com.mateusz.komiwojazer.utils.Request;
 
 
@@ -18,31 +19,31 @@ public class Task {
 	private final List<City> cities;
 	private final double[][] distanceMatrix;
 	private final List<Route> parents;
-	private final boolean complete;
+	private final double minimum;
 
 	private Task(final Task t) {
 		this.cities = t.getCities();
 		this.distanceMatrix = t.getDistanceMatrix();
 		this.parents = t.getParents();
-		this.complete = t.isComplete();
-	}
-
-	private Task(final List<City> cities,final double[][] distanceMatrix,final List<Route> parents,final boolean complete) {
-		this.cities = cities;
-		this.distanceMatrix = distanceMatrix;
-		this.parents = parents;
-		this.complete = complete;
+		this.minimum = t.getMinimum();
 	}
 
 	private Task(final List<City> cities,final double[][] distanceMatrix,final List<Route> parents) {
 		this.cities = cities;
 		this.distanceMatrix = distanceMatrix;
 		this.parents = parents;
-		this.complete = false;
+		this.minimum = -2;
+	}
+
+	private Task(final List<City> cities,final double[][] distanceMatrix,final List<Route> parents,final double minimum) {
+		this.cities = cities;
+		this.distanceMatrix = distanceMatrix;
+		this.parents = parents;
+		this.minimum = minimum;
 	}
 
 	private Task withParents(final List<Route> parents) {
-		return new Task(cities, distanceMatrix, parents, complete);
+		return new Task(cities, distanceMatrix, parents,minimum);
 	}
 
 	/**
@@ -55,61 +56,74 @@ public class Task {
 	public static CompletableFuture<Task> produceTask(final Request args) {
 		return CompletableFuture.supplyAsync(() -> {
 			
-			// Returns length of a vector
-			final BiFunction<City, City, Double> f = (c1, c2) -> 
-			 Math.sqrt(Math.pow(c2.getX() - c1.getX(), 2) + Math.pow(c2.getY() - c1.getY(), 2));
-			
-			// Generate Cities
-			final List<City> cities = new LinkedList<>();
-			
-			while(cities.size() < args.getCitiesQuantity()){
+				// Returns length of a vector
+				final BiFunction<City, City, Double> f = (c1, c2) -> 
+				 Math.sqrt(Math.pow(c2.getX() - c1.getX(), 2) + Math.pow(c2.getY() - c1.getY(), 2));
 				
-				final City c = City.randomCity();
+				// Generate Cities
+				final List<City> cities = new LinkedList<>();
 				
-				int j = 0;
-				
-				while (j < cities.size()) {
-					final City tmp = cities.get(j);
-					if (f.apply(tmp, c) < City.DIAMETER * 2){
-						break;
+				while(cities.size() < args.getCitiesQuantity()){
+					
+					final City c = City.randomCity();
+					
+					int j = 0;
+					
+					while (j < cities.size()) {
+						final City tmp = cities.get(j);
+						if (f.apply(tmp, c) < City.DIAMETER * 2){
+							break;
+						}
+						else{
+							j++;
+						}
 					}
-					else{
-						j++;
+					if (j == cities.size()) {
+						cities.add(c);
 					}
-				}
-				if (j == cities.size()) {
-					cities.add(c);
+					
 				}
 				
-			}
-			
-			// Calculate DistanceMatrix
-			final int quantity = args.getCitiesQuantity();
-			final double[][] distanceMatrix = new double[quantity][quantity];
-			
-			IntStream.range(0, quantity).parallel().forEach(i -> IntStream.range(0, quantity)
-					.forEach(j -> distanceMatrix[i][j] = f.apply(cities.get(i), cities.get(j))));
+				// Calculate DistanceMatrix
+				final int quantity = args.getCitiesQuantity();
+				final double[][] distanceMatrix = new double[quantity][quantity];
+				
+				IntStream.range(0, quantity).forEach(i -> IntStream.range(0, quantity)
+						.forEach(j -> distanceMatrix[i][j] = f.apply(cities.get(i), cities.get(j))));
 
-
-			// Create and rate  parents population
-			List<Route> parents = Stream
-					.generate(() -> args.getCitiesQuantity())
-					.parallel()
-					.limit(args.getParents())
-					.map(Route::generateRandomRoute)
-					.map(route -> route.rate(distanceMatrix))
-					.collect(Collectors.toList());
-			
-			parents = Route.sortRoutes(parents);
-		
-			// return new started task
-			return new Task(cities, distanceMatrix, parents);
-			
+				//calculate minimum if needed in heuristic way
+				CompletableFuture<Double> minimum = (args.isHeuristic() && quantity <= 22) ?
+						CompletableFuture.supplyAsync(()->Minimum.calculateMinimum(distanceMatrix)):
+						CompletableFuture.completedFuture(new Double(-2));
+						
+				// Create and rate  parents population
+				List<Route> parents = Stream
+						.generate(() -> args.getCitiesQuantity())
+						.parallel()
+						.limit(args.getParents())
+						.map(Route::generateRandomRoute)
+						.map(route -> route.rate(distanceMatrix))
+						.collect(Collectors.toList());
+				
+				parents = Route.sortRoutes(parents);
+				
+				//Save minimal value of fitting function
+				if(args.isSaveFittingFunctionValue()){
+					FittingValueService.saveFirst(args.getId(),parents.get(0).getQuality());
+				}
+				
+				// return new task
+				try {
+					return new Task(cities, distanceMatrix, parents,minimum.get());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return new Task(cities, distanceMatrix, parents);
 		});
 	}
 
 	/**
-	 * Proceed started task
+	 * Proceeds started task
 	 * 
 	 * @param args - Arguments from client request which provides necessary informations
 	 * @return task
@@ -142,8 +156,10 @@ public class Task {
 		//mutate
 		kidsList.replaceAll(route-> route.mutate(args));
 		
-		//Check change rate, and returns old task if needed
-		double ratio = ((double)(kidsList.stream().filter(route -> route.isChanged()).count()) / (double)(args.getKids())*100.0);
+		//Check change rate, and return old task if needed
+		double ratio = 
+		((double)(kidsList.stream().filter(route -> route.isChanged()).count()) / (double)(args.getKids())*100.0);
+	
 		if (ratio < args.getChange()){
 			return this;		
 		}
@@ -158,19 +174,15 @@ public class Task {
 		//Sort kids
 		kidsList = Route.sortRoutes(kidsList);
 		
-		//Selection
-		kidsList = kidsList.subList(0, args.getParents());
+		//Select parent population
+		kidsList = kidsList.subList(0, Math.min(args.getParents(), kidsList.size()));
 		
-		//Save minimal value of fitness function
+		//Save minimal value of fitting function
 		if(args.isSaveFittingFunctionValue()){
-			FilesService.save(args.getId(),kidsList.get(0).getQuality());
+			FittingValueService.save(args.getId(),kidsList.get(0).getQuality());
 		}
 
 		return this.withParents(kidsList);
-	}
-
-	public boolean isComplete() {
-		return complete;
 	}
 
 	public List<City> getCities() {
@@ -187,6 +199,14 @@ public class Task {
 	
 	public double getQuality(){
 		return parents.get(0).getQuality();
+	}
+
+	public double getMinimum() {
+		return minimum;
+	}
+
+	public boolean isCompleted() {
+		return getQuality() == minimum;
 	}
 
 }

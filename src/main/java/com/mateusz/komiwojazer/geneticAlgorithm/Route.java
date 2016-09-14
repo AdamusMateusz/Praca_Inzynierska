@@ -51,22 +51,15 @@ public class Route implements Cloneable {
 
 		final double r = IntStream.range(1, length).mapToDouble(i -> distanceMatrix[cities[i - 1]][cities[i]]).sum();
 
-		return this.withRate(r + distanceMatrix[0][length - 1]);
+		return this.withRate(r + distanceMatrix[cities[length - 1]][cities[0]]);
 	}
 	
-	public static double rate(final int[] route, final double[][] distanceMatrix) {
-		final int length = route.length;
-
-		for (int i = 0; i < length - 1; i++)
-			for (int j = i + 1; j < length; j++)
-				if (route[i] == route[j])
-					return -1;
-
-		final double r = IntStream.range(1, length).mapToDouble(i -> distanceMatrix[route[i - 1]][route[i]]).sum();
-
-		return r + distanceMatrix[0][length - 1];
+	public static double ratePermutation(final int[] route, final double[][] distanceMatrix) {
+		return IntStream.range(1, route.length)
+				.mapToDouble(i -> distanceMatrix[route[i - 1]][route[i]])
+				.sum() + distanceMatrix[route[route.length - 1]][route[0]] ;
 	}
-
+	
 	public int[] getCities() {
 		return cities;
 	}

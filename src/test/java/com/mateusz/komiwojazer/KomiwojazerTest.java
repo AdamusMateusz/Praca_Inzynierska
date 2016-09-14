@@ -1,23 +1,14 @@
 package com.mateusz.komiwojazer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 
-import com.mateusz.komiwojazer.geneticAlgorithm.Minimum;
 import com.mateusz.komiwojazer.geneticAlgorithm.Route;
-import com.mateusz.komiwojazer.geneticAlgorithm.Task;
-import com.mateusz.komiwojazer.utils.Request;
 
 public class KomiwojazerTest {
 

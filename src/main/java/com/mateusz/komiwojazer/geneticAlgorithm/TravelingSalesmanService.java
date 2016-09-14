@@ -15,6 +15,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -22,6 +24,7 @@ import javax.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
 
 import com.mateusz.komiwojazer.utils.MapOverwiew;
+import com.mateusz.komiwojazer.utils.Minimum;
 import com.mateusz.komiwojazer.utils.Request;
 
 @Service
@@ -29,7 +32,6 @@ public class TravelingSalesmanService {
 	private ConcurrentHashMap<Integer, CompletableFuture<Task>> tasks;
 	private ConcurrentHashMap<Integer, Task> completedTasks;
 	private ConcurrentHashMap<Integer, Request> arguments;
-	//private ConcurrentHashMap<Integer, Double> results;
 	private AtomicInteger counter;
 	private ExecutorService executor;
 	
@@ -44,31 +46,43 @@ public class TravelingSalesmanService {
 		executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), threadFactory());
 
 	}
-
+	
 	public Integer startNewTask(Request request) {
-		return startNewTask(-1,request);
+		return startNewTask(-1,request,true);
 	}
 	
-	private Integer startNewTask(int id, Request request) {
+	public Integer startNewTask(Request request, boolean stopped) {
+		return startNewTask(-1,request,stopped);
+	}
+	
+	private Integer startNewTask(int id, Request request, boolean stopped) {
 		Integer key = (id == -1 ? counter.getAndIncrement() : id);
 		request.setId(key);
 		arguments.put(key, request);
 		CompletableFuture<Task> t = Task.produceTask(request);
-		tasks.put(key, t);
-		//t.thenAccept(task -> results.put(key, MinAndMax.getMinAndMax(task)));
+		
+		if(!stopped){
+			tasks.put(key, t);
+			
+		}else{
+			t.thenAccept(completedTask->completedTasks.put(key, completedTask));
+		}
 		return key;
 	}
 
-	public void updateRequest(int id, Request set) {
+	public void updateRequest(int id, Request set,boolean stopped) {
 		Request oldSet = arguments.get(id);
-		if (oldSet == null)
-			arguments.put(id, set);
-		else {
-			if (oldSet.isChangeCritical(set))
-				startNewTask(set);
+		
+		if (oldSet != null)
+			if (oldSet.isChangeCritical(set)){
+				delete(id);
+				startNewTask(id,set,stopped);
+			}
 			else
 				arguments.put(id, set);
-		}
+		else 
+				arguments.put(id, set);
+		
 	}
 
 	public Future<Task> getMap(int id) {
@@ -76,18 +90,12 @@ public class TravelingSalesmanService {
 	}
 
 	public List<MapOverwiew> getAllMapsOverview() {
-		List<MapOverwiew> maps = new ArrayList<>();
 
-		Set<Entry<Integer, Request>> entrySet = arguments.entrySet();
+		return arguments.entrySet().parallelStream()
+		.map(entry -> produceSingleOverwiew(entry.getValue(), entry.getKey()))
+		.sorted((e1,e2)->Integer.compare(e1.getId(), e2.getId()))
+		.collect(Collectors.toList());
 		
-		for (Entry<Integer, Request> entry : entrySet) {
-
-			maps.add(produceSingleOverwiew(entry.getValue(), entry.getKey()));
-			
-		}
-		
-		maps.sort((m1,m2)-> Integer.compare(m1.getId(),m2.getId()));
-		return maps;
 	}
 	
 	public List<MapOverwiew> getMapsOverview(int id) {
@@ -99,14 +107,16 @@ public class TravelingSalesmanService {
 				result.add(produceSingleOverwiew(request, id));
 			}
 		}
-		
+				
 		return result;
+		
 	}
 	
 	private MapOverwiew produceSingleOverwiew(Request r, int id){
 		boolean complete = false;
 		boolean running = true;
 		double quality =-1;
+		double heuristicValue = -1;
 		List<City> cities = new ArrayList<>();
 		try {
 			 CompletableFuture<Task> completableFuture = tasks.get(id);
@@ -120,12 +130,16 @@ public class TravelingSalesmanService {
 			}
 					
 			quality = task.getQuality();
-			complete = task.isComplete();
+			complete = task.isCompleted();
 			cities = task.getCities();
+			heuristicValue = task.getMinimum() ;
+			
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
+		}catch(NullPointerException e){
+			return null;
 		}
-		return new MapOverwiew(r, complete,running,cities,quality);
+		return new MapOverwiew(r,heuristicValue, complete,running,cities,quality);
 	}
 
 	@PostConstruct
@@ -139,7 +153,7 @@ public class TravelingSalesmanService {
 						TimeUnit.SECONDS.sleep(3);
 					} else {
 						executeTasks();
-						TimeUnit.MILLISECONDS.sleep(50);
+						//TimeUnit.MILLISECONDS.sleep(50);
 					}
 				}
 			} catch (Exception e) {
@@ -162,18 +176,18 @@ public class TravelingSalesmanService {
 	}
 
 	private void executeTasks() {
-		tasks.forEachEntry(Long.MAX_VALUE, entry -> {
+		tasks.entrySet().stream().forEach(entry -> {
 			try {
 				final CompletableFuture<Task> future = entry.getValue();
 
 				if (future.isDone()) {
 					Task task = future.get();
 
-					if (task.isComplete()) {
+					if (task.isCompleted() ) {
 						completedTasks.put(entry.getKey(), entry.getValue().get());
 						tasks.remove(entry.getKey());
-					} else {		
 						
+					} else {		
 						tasks.put(entry.getKey(),CompletableFuture
 								.supplyAsync(() -> task.proceed(arguments.get(entry.getKey())), executor));
 					}
@@ -233,13 +247,15 @@ public class TravelingSalesmanService {
 		return false;
 	}
 
-	public boolean delete(int id, String password) {
-		//password needed
-		Object ob = completedTasks.get(id);
+	public boolean delete(int id) {
+		
+		Object ob = completedTasks.remove(id);
 		
 		if(Objects.isNull(ob)){
 			tasks.remove(id);
 		}
+		
+		arguments.remove(id);
 		return true;
 	}
 	

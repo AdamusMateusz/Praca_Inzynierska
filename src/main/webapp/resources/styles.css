@@ -13,11 +13,6 @@ body {
 	background-color: #FFF;
 }
 
-.load {
-	text-align: center;
-	padding: 24% 0;
-}
-
 .addChat {
 	margin: 15px 0;
 }
@@ -52,6 +47,15 @@ body {
 	margin-right: 15px;
 }
 
+.svg-container-watch { 
+	display: inline-block;
+	position: relative;
+	width: 30%;
+	left:35%;
+	padding-bottom: 30%; 
+	vertical-align: middle; 
+	overflow: hidden; 
+}
 
 .svg-container { 
 	display: inline-block;
@@ -61,6 +65,17 @@ body {
 	vertical-align: middle; 
 	overflow: hidden; 
 }
+
+.svg-container-mapList { 
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	padding-bottom: 54%; 
+	vertical-align: middle; 
+	overflow: hidden; 
+}
+
+
 
 .svg-content { 
 	display: inline-block;
@@ -73,10 +88,73 @@ body {
 	margin-top: 20px !important;
 }
 
+path.map{
+	stroke:#31708f;
+	fill:#e3f2fd;
+	stroke-width:0.002;
+}
+
+path.fitting{
+	fill-opacity:.8;
+	stroke-width:1.5;
+}
+
+text{
+	font-family: Verdana;
+}
+
+
+line.map{
+	stroke:#455a64;
+	stroke-width:.4;
+	stroke-opacity:1;
+}
+
+text.helper{
+	fill:#f50057;
+}
+
+line.helper{
+	stroke:#f50057;
+}
+
+/* animations */
+/* Zegarek */
+#sekundy,#minuty,#godziny{
+	transform-origin: 50% 50%;
+	animation-name: wskazowkaAnimacja;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+#sekundy {
+	animation-duration: 1s;
+}	
+
+#minuty{
+	animation-duration: 2s;
+}
+
+#godziny{
+	animation-duration: 3s;
+
+}
+
+@keyframes wskazowkaAnimacja{
+	0%{
+		transform: rotate(0);
+	}
+	100%{
+		transform: rotate(360deg);
+	}
+}
+
+/* Angular */
+
 a.topic-animate.ng-enter{
-	transition: all 0.4s ;
-	opacity:0;
-	transform: translateX(-100%);
+transition: all 0.4s ;
+opacity:0;
+transform: translateX(-100%);
 }
 
 a.topic-animate.ng-enter-stagger{
@@ -103,65 +181,29 @@ a.topic-animate.ng-enter-active{
 	transform: translateY(0);
 	transform: rotate(0deg);
 }
-
-.mapsList-animate.ng-enter{
-	transition: all .5s linear;
-	transform: scaleY(0);
-}
-
-.mapsList-animate.ng-enter-active{
-	transform: scaleY(1);
-}
-
-path{
-	stroke:#31708f;
-	fill:#d9edf7;
-	stroke-width:0.002;
-}
-
-path.fitting{
-	fill-opacity:.8;
-	stroke-width:1.5;
-}
-
-circle{
+circle.map{
 	stroke:#455a64;
 	fill:#d9edf7;
 	stroke-width:0.002;
+	transition: fill-opacity .2s linear;
 }
+
 
 circle.animated-circle{
-	transition: transform .4s, fill-opacity .4s linear;
+	transition: transform .6s, fill-opacity .5s linear;
 }
 
-circle:hover{
+circle#map:hover{
 	fill-opacity:.6;
 }
 
-circle.animated-circle.ng-enter{
+circle.animated-circle.ng-enter, circle.animated-circle.ng-leave-active{
 	fill-opacity:0;
 	transform: scale(0,0);
 }
 
-circle.animated-circle.ng-enter-active{
+circle.animated-circle.ng-enter-active, circle.animated-circle.ng-leave{
 	transform: scale(1,1);
-}
-
-
-text.ng-enter{
-	animation: txt 0.25s linear;	
-}
-
-text.ng-leave{
-	animation: txt 0.25s linear reverse;	
-}
-
-text{
-	font-family: Verdana;
-}
-
-text.minimum{
-	fill:#31708f;
 }
 
 @keyframes txt{
@@ -173,12 +215,64 @@ text.minimum{
 	}
 }
 
-line{
-	stroke:#455a64;
-	stroke-width:.4;
-	stroke-opacity:1;
+text.ng-enter{
+	animation: txt 0.25s linear;	
 }
 
-line.minimum{
-	stroke:#31708f;
+text.ng-leave{
+	animation: txt 0.25s linear reverse;	
 }
+/*Ikona w podgladzie mapy*/
+#refreshIcon{
+	animation-name: rotate;
+	animation-duration: 1s;
+	animation-timing-function: ease;
+	animation-iteration-count: infinite;
+}
+
+@keyframes rotate{
+		0%{
+			transform: rotate(0);
+		}
+		100%{
+			transform: rotate(360deg);
+		}
+}
+
+/* Astronauta */
+.astronaut{
+	transform-origin: 30% 30%;
+	animation-name: rotateAstronaut;
+	animation-duration: 10s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	}
+	
+.ziemia{
+	transform-origin: 20% 20%;
+	animation-name: fadeout;
+	animation-duration: 30s;
+	animation-timing-function: cubic-bezier(.14,.73,.21,1);
+	transform: scale(0,0);
+}
+
+@keyframes rotateAstronaut{
+		0%{
+			transform: translateX(-120px) rotate(0);
+		}
+		100%{
+			transform: translateX(-120px) rotate(360deg);
+		}
+}
+
+@keyframes fadeout{
+
+	0%{
+	transform: scale(35);
+	}
+	
+	100%{
+	transform: scale(0,0);
+	}
+}
+	

@@ -8,7 +8,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,25 +34,15 @@ public class KomiwojazerController {
 	@Autowired
 	private TravelingSalesmanService service;
 
-	@RequestMapping("/test")
-	public @ResponseBody Task test() throws InterruptedException, ExecutionException, TimeoutException {
-		CompletableFuture<Task> task = Task.produceTask(Request.fakeSet());
-		task.thenAccept(t -> {
-			//System.out.println(MinAndMax.getMinAndMax(t));
-		});
-
-		return task.get(AWAIT_TIME, TimeUnit.SECONDS);
-	}
-
 	@RequestMapping(value = "/startMap", method = RequestMethod.POST)
-	public @ResponseBody Integer startNewMap(@RequestBody Request set) {
-		return service.startNewTask(set);
+	public @ResponseBody Integer startNewMap(@RequestBody Request set,@RequestParam("stopped")boolean stopped) {
+		return service.startNewTask(set,stopped);
 	}
 
-	@RequestMapping(value = "/changeRequesst/{id}", method = RequestMethod.PUT)
-	public void updateRequest(@RequestBody Request set, @PathVariable("id") int id) {
+	@RequestMapping(value = "/changeRequest/{id}", method = RequestMethod.PUT)
+	public void updateRequest(@RequestBody Request set, @PathVariable("id") int id,@RequestParam("stopped")boolean stopped) {
 		set.setId(id);
-		service.updateRequest(id, set);
+		service.updateRequest(id, set,stopped);
 	}
 	
 	@RequestMapping(value = "/getRequest/{id}", method = RequestMethod.GET)
@@ -83,7 +73,7 @@ public class KomiwojazerController {
 			values.add(new Double(-1));
 		}
 		
-		double max = ThreadLocalRandom.current().nextDouble(2000.0, 10000.0);
+		double max = ThreadLocalRandom.current().nextDouble(2000.0, 30000.0);
 		
 		while (max > 800){
 			
@@ -115,40 +105,44 @@ public class KomiwojazerController {
 	}
 
 	@RequestMapping(value = "/deleteMap/{id}", method = RequestMethod.DELETE)
-	public void getMapsOverview(@PathVariable("id") int id, @RequestBody String password) {
-		service.delete(id, password);
+	public void deleteMap(@PathVariable("id") int id) {
+		service.delete(id);
 	}
 
 	public void setService(TravelingSalesmanService service) {
 		this.service = service;
 	}
 
-	// TODO Ustawic prawidlowe statusy (np.404) do odpowiadajacego bledu
 	@ExceptionHandler(TimeoutException.class)
-	public @ResponseBody String timeout(HttpServletResponse rs) {
-		rs.setStatus(408);
+	public @ResponseBody String timeout(HttpServletResponse rs,Exception ex) {
+		ex.printStackTrace();
+		rs.setStatus(504);
 		return "timeout".toUpperCase();
 	}
 
 	@ExceptionHandler(ExecutionException.class)
-	public @ResponseBody String executionException(HttpServletResponse rs) {
-		return "executionException".toUpperCase();
+	public @ResponseBody String executionException(HttpServletResponse rs,Exception ex) {
+		ex.printStackTrace();
+		rs.setStatus(500);
+		return "execution_exception".toUpperCase();
 	}
 
 	@ExceptionHandler(InterruptedException.class)
-	public @ResponseBody String interruptedException(HttpServletResponse rs) {
-		return "interruptedException".toUpperCase();
+	public @ResponseBody String interruptedException(HttpServletResponse rs,Exception ex) {
+		ex.printStackTrace();
+		rs.setStatus(500);
+		return "interrupted_exception".toUpperCase();
 	}
 
 	@ExceptionHandler(NullPointerException.class)
-	public @ResponseBody String nullPointer(HttpServletResponse rs) {
-		rs.setStatus(200);
-		return "nullPointerException".toUpperCase();
+	public @ResponseBody String nullPointer(HttpServletResponse rs,Exception ex) {
+		ex.printStackTrace();
+		rs.setStatus(500);
+		return "nullPointer_exception".toUpperCase();
 	}
 	
-	@PostConstruct
+//	@PostConstruct
 	public void constructFakeMaps(){
-//		service.startNewTask(Request.randomFakeSet(20));
 		for (int i=5; i <= 50; i+=5)
 			service.startNewTask(Request.randomFakeSet(i));
 		

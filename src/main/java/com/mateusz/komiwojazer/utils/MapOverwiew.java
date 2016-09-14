@@ -9,19 +9,19 @@ public class MapOverwiew {
 	private final int id;
 	private final int parents;
 	private final boolean heuristic;
+	private final double heuristicValue;
 	private final boolean saveFittingFunctionValue;
-	private final boolean password;
 	private final boolean complete;
 	private final boolean running;
 	private final List<City> cities;
 	private final double quality;
 
-	public MapOverwiew(Request req, boolean complete, boolean running, List<City> cities,double quality) {
+	public MapOverwiew(Request req, double heuristicValue, boolean complete, boolean running, List<City> cities,double quality) {
 		this.id = req.getId();
 		this.parents = req.getParents();
 		this.heuristic = req.isHeuristic();
+		this.heuristicValue = heuristicValue;
 		this.saveFittingFunctionValue = req.isSaveFittingFunctionValue();
-		this.password = req.isProtected();
 		this.complete = complete;
 		this.running = running;
 		this.cities = cities;
@@ -44,10 +44,6 @@ public class MapOverwiew {
 		return saveFittingFunctionValue;
 	}
 
-	public boolean isProtected() {
-		return password;
-	}
-
 	public boolean isComplete() {
 		return complete;
 	}
@@ -62,5 +58,9 @@ public class MapOverwiew {
 	
 	public double getQuality() {
 		return quality;
+	}
+
+	public double getHeuristicValue() {
+		return heuristicValue;
 	}
 }

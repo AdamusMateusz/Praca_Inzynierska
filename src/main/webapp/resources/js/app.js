@@ -22,8 +22,13 @@ angular.module("myApp", [ 'controllers', 'ngRoute' ,'ui.bootstrap','ngAnimate' ]
 			}).when('/map/:id', {
 				controller : 'mapController',
 				templateUrl : 'map.html'
+			}).when('/error/:id/:message', {
+				templateUrl : 'error.html',
+				controller : 'errorController'
+			}).when('/', {
+				redirectTo : '/start',
 			}).otherwise({
-				redirectTo : '/start'
+				redirectTo : '/error/404/nf'
 			});
 			
 		});
