@@ -110,14 +110,4 @@
 		augue nulla, interdum in consectetur a, condimentum et ipsum. Class
 		aptent taciti sociosqu ad litora torquent per conubia nostra</div>
 </div>
-<div class="row well">
-	<div>
-		<h3>Haslo</h3>
-	</div>
-	<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-		adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl maximus
-		eu. Integer faucibus mauris posuere orci sollicitudin, vitae dignissim
-		orci sagittis. Etiam porttitor neque non egestas tincidunt. Curabitur
-		augue nulla, interdum in consectetur a, condimentum et ipsum. Class
-		aptent taciti sociosqu ad litora torquent per conubia nostra</div>
-</div>
+

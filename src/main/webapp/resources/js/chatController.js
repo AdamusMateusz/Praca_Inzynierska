@@ -3,13 +3,14 @@ angular.module('chatControllerModule',[]).controller('chatController', [
                                         		'$http',
 	function($scope, $http) {
 		$scope.message={author:"",message:""};
-		
+
 	
 	$http.get("chat/topics").then(
 			function(response) {
-				if (response.status == 200)
+				if (response.status == 200){
 						$scope.topics = JSON.parse(JSON
 								.stringify(response.data));
+				}
 			});
 
 
@@ -44,11 +45,13 @@ angular.module('chatControllerModule',[]).controller('chatController', [
 
 	$scope.addTopic = function() {
 		if (validate($scope.chatTitle)) {
-			$http.post("chat/addTopic", $scope.chatTitle).then(
+			$http.post("chat/addTopic", $scope.chatTitle)
+			.then(
 					function(response) {
 						if (response.status == 200) {
-							$scope.topics.push(new Topic(
-									$scope.chatTitle, 0));
+							/* $scope.topics.push(new Topic(
+									$scope.chatTitle, 0)); */
+							$scope.chatTitle = "";
 						}
 					})
 		}
@@ -56,14 +59,44 @@ angular.module('chatControllerModule',[]).controller('chatController', [
 	
 	$scope.addMessage = function() {
 		if(validate($scope.message)){
-			$http.post("chat/addMessage/"+$scope.active,$scope.message).then(
+			$http.post("chat/addMessage/"+$scope.active,$scope.message)
+			.then(
 					function(response) {
 						if (response.status == 200) {
-							$scope.messages.push(new Message($scope.message.author,$scope.message.message));	
-							$scope.topics[$scope.active].messagesCount++;
+							/*$scope.messages.push(new Message($scope.message.author,$scope.message.message));	
+							$scope.topics[$scope.active].messagesCount++;*/
 							$scope.message.message="";
 						}
 					})
-		};
-	}
+		}
+	};
+	
+	var stompClient = null;
+
+	var socket = new SockJS('/komiwojazer/socket');
+	stompClient = Stomp.over(socket);  
+
+	stompClient.connect({}, function(frame){
+
+		stompClient.subscribe('/topic/topics', function(topic) {
+			$scope.topics.push(new Topic(topic.body,0));
+			$scope.$apply();
+		});	
+		
+		stompClient.subscribe('/topic/messages', function(message) {
+			
+			$scope.topics[message.headers.topicID].messagesCount++;
+			if(message.headers.topicID == $scope.active){
+				let body = JSON.parse(message.body);
+				$scope.messages.push(new Message(body.author,body.message));
+			}
+			$scope.$apply();
+		});	
+		
+	});
+	
+	$scope.$on("$destroy", function() {
+		stompClient.disconnect();
+	});
+	
 } ]);

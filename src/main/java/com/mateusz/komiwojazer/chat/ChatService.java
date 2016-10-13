@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +32,7 @@ public class ChatService {
 		topics.get(topicId).addMessage(m);
 	}
 
-	@PostConstruct
+	//@PostConstruct
 	public void generateFakeTopics() {
 		final String fakeTitles[] = { "O stronie", "Algorytm", "Problemy", "Rozmowy ogólne", "Przywitaj siê",
 				"O wszystkim","Propozycje zmian"};
@@ -43,7 +41,7 @@ public class ChatService {
 		for (int i = 0; i < fakeTitles.length; i++) {
 			Topic t = new Topic(fakeTitles[i]);
 			final int range = (int) ((Math.random() * 10) + 1 );
-			t.addMessages(Stream.generate(Message::getFakeMessage).limit(range).parallel()
+			t.addMessages(Stream.generate(Message::getFakeMessage).limit(range)
 					.collect(Collectors.toList()));
 			topics.add(t);
 		}

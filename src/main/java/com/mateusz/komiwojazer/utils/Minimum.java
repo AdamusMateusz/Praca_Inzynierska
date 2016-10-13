@@ -1,15 +1,12 @@
 package com.mateusz.komiwojazer.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
-
-import org.springframework.util.SocketUtils;
 
 import com.mateusz.komiwojazer.geneticAlgorithm.Route;
 
@@ -35,14 +32,7 @@ public class Minimum {
 		return IntStream.range(0, n)
 		.mapToObj(integer-> calculateMinimumHelper(integer,distanceMatrix))
 		.collect(Collectors.toList()).stream()
-		.map(future->{
-			try {
-				return future.get();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return Double.MAX_VALUE;
-		})
+		.map(CompletableFuture::join)
 		.reduce(Double.MAX_VALUE,(d1,d2)->Math.min(d1, d2));
 		
 	}

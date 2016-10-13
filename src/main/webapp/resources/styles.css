@@ -75,7 +75,14 @@ body {
 	overflow: hidden; 
 }
 
-
+.svg-container-startpage-miniature { 
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	padding-bottom: 100%; 
+	vertical-align: middle; 
+	overflow: hidden; 
+}
 
 .svg-content { 
 	display: inline-block;
@@ -118,7 +125,7 @@ line.helper{
 	stroke:#f50057;
 }
 
-/* animations */
+/* Animacje */
 /* Zegarek */
 #sekundy,#minuty,#godziny{
 	transform-origin: 50% 50%;
@@ -150,7 +157,7 @@ line.helper{
 }
 
 /* Angular */
-
+/*Chat*/
 a.topic-animate.ng-enter{
 transition: all 0.4s ;
 opacity:0;
@@ -239,7 +246,7 @@ text.ng-leave{
 		}
 }
 
-/* Astronauta */
+/* Astronauta z error_page*/
 .astronaut{
 	transform-origin: 30% 30%;
 	animation-name: rotateAstronaut;
@@ -272,7 +279,108 @@ text.ng-leave{
 	}
 	
 	100%{
-	transform: scale(0,0);
+	transform: scale(0);
 	}
 }
+
+/* Strona startowa */
+
+svg.startMiniature *{
+	transition: all .6s;
+}
+
+/* Mapa */
+
+#drogi{
+	fill-opacity:.1;
+}
+
+#domek{
+	fill-opacity:.5;
+}
+
+#drogi, #domek, #woda{
+	fill:#b0bec5;
+}
+
+.well:hover #drogi{
+	fill:#FCE700;
+	fill-opacity:1;
+}
+
+.well:hover #domek{
+	fill:#A5CE39;
+	fill-opacity:1;
+}
+
+.well:hover #woda{
+	fill:#337AB7;
+}
+
+#szpilkaSrodek, #szpilka{
+	fill:#b0bec5;
+	stroke:#FFFFFF;
+	opacity:0;
+	transform:translateY(-10px);
+}
+
+.well:hover #szpilka{
+	fill:#EC195A;
+	stroke:#82153A;
+}
+
+.well:hover #szpilkaSrodek{
+	fill:#A5CE39;
+	stroke:#82153A;
+}
+
+svg:hover #szpilka, svg:hover #szpilkaSrodek{
+	opacity:1;	
+	transform:translateY(0);
+} 
+
+/* Statystyki i Chat*/
+
+#obrys {
+	stroke:#b0bec5;
+	fill-opacity:0;
+}
+
+#etykieta{
+	opacity:0;
+	stroke:#b0bec5;
+	transform:translateY(-5px);
+}
+
+svg:hover #etykieta{
+	opacity:1;
+	stroke:#337AB7;
+	transform:translateY(0);
+}
+
+.well:hover #obrys {
+	stroke:#337AB7;
+	fill-opacity:1;
+}
+
+.startMiniature line{
+	stroke:#b0bec5;
+}
+
+svg:hover #linia1Chat, .well:hover #linia1Staty{
+	stroke:#FEE900;
+}
+
+svg:hover #linia2Chat, .well:hover #linia2Staty{
+	stroke:#ED1459;
+}
+
+svg:hover #linia3Chat, .well:hover #linia3Staty{
+	stroke:#A6CE39;
+}
+
+
+
+
+
 	

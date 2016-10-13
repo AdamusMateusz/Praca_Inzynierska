@@ -2,9 +2,7 @@ package com.mateusz.komiwojazer.geneticAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -16,15 +14,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springframework.stereotype.Service;
 
+import com.mateusz.komiwojazer.utils.FittingValueService;
 import com.mateusz.komiwojazer.utils.MapOverwiew;
-import com.mateusz.komiwojazer.utils.Minimum;
 import com.mateusz.komiwojazer.utils.Request;
 
 @Service
@@ -70,13 +67,13 @@ public class TravelingSalesmanService {
 		return key;
 	}
 
-	public void updateRequest(int id, Request set,boolean stopped) {
+	public void updateRequest(int id, Request set) {
 		Request oldSet = arguments.get(id);
 		
 		if (oldSet != null)
 			if (oldSet.isChangeCritical(set)){
 				delete(id);
-				startNewTask(id,set,stopped);
+				startNewTask(id,set,false);
 			}
 			else
 				arguments.put(id, set);
@@ -256,6 +253,7 @@ public class TravelingSalesmanService {
 		}
 		
 		arguments.remove(id);
+		FittingValueService.deleteMap(id);
 		return true;
 	}
 	

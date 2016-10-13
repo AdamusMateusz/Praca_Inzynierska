@@ -2,7 +2,7 @@
 <div class="page-header">
 	<h1>Chat</h1>
 	<div class="text-muted">Miejsce dla uzytkownikow poswiecone
-		wymianie zdan na rozne tematy</div>
+		wymianie zdan na rozne tematy </div>
 
 </div>
 
@@ -124,5 +124,4 @@
 	</div>
 
 </div>
-
 

@@ -3,10 +3,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="utf-8">
-
-<title>Home</title>
+<!-- Chrome, Firefox OS, Opera and Vivaldi -->
+<meta name="theme-color" content="#337ab7">
+<!-- Windows Phone -->
+<meta name="msapplication-navbutton-color" content="#337ab7">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-status-bar-style" content="#337ab7">
+<title>Problem komiwojazera</title>
+<link rel="icon" href="<c:url value="/resources/images/icon.png" />">
 
 <!-- AngularJS -->
 <script
@@ -42,6 +47,10 @@
 <script src="<c:url value="/resources/js/statsController.js" />"></script>
 <script src="<c:url value="/resources/js/chatController.js" />"></script>
 <script src="<c:url value="/resources/js/errorController.js" />"></script>
+
+<!-- WebSockets -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.1/sockjs.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 
 </head>
 <body ng-app="myApp">
@@ -87,7 +96,8 @@
 		</div>
 		-->
 
-		<div ng-view>
+	
+		<div ng-view >
 			
 		<div class="svg-container-watch">
 			

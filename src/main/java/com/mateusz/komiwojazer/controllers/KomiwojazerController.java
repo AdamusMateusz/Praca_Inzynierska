@@ -1,10 +1,8 @@
 package com.mateusz.komiwojazer.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.Queue;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mateusz.komiwojazer.geneticAlgorithm.Task;
 import com.mateusz.komiwojazer.geneticAlgorithm.TravelingSalesmanService;
+import com.mateusz.komiwojazer.utils.FittingValueService;
 import com.mateusz.komiwojazer.utils.MapOverwiew;
 import com.mateusz.komiwojazer.utils.Request;
 
@@ -40,9 +39,9 @@ public class KomiwojazerController {
 	}
 
 	@RequestMapping(value = "/changeRequest/{id}", method = RequestMethod.PUT)
-	public void updateRequest(@RequestBody Request set, @PathVariable("id") int id,@RequestParam("stopped")boolean stopped) {
+	public void updateRequest(@RequestBody Request set, @PathVariable("id") int id) {
 		set.setId(id);
-		service.updateRequest(id, set,stopped);
+		service.updateRequest(id, set);
 	}
 	
 	@RequestMapping(value = "/getRequest/{id}", method = RequestMethod.GET)
@@ -66,8 +65,8 @@ public class KomiwojazerController {
 	}
 	
 	@RequestMapping(value = "/getFittingFunctionValues/{id}", method = RequestMethod.GET)
-	public @ResponseBody List<Double> getFittingFunctionValues(@PathVariable("id") int id) {
-		List<Double> values = new ArrayList<>();
+	public @ResponseBody Queue<Double> getFittingFunctionValues(@PathVariable("id") int id) {
+		/*List<Double> values = new ArrayList<>();
 		
 		for(int i = ThreadLocalRandom.current().nextInt(100,201); i >= 0; i--){
 			values.add(new Double(-1));
@@ -84,7 +83,9 @@ public class KomiwojazerController {
 			max -= ThreadLocalRandom.current().nextDouble(50,300);
 		}
 		
-		return values;
+		return values;*/
+		
+		return FittingValueService.getValues(id);
 	}
 	
 

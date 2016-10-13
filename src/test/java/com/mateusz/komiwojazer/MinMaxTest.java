@@ -4,8 +4,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.LongStream;
 
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
-import org.springframework.util.SocketUtils;
 
 import com.mateusz.komiwojazer.geneticAlgorithm.Task;
 import com.mateusz.komiwojazer.utils.Minimum;
