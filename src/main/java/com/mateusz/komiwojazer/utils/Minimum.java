@@ -35,6 +35,7 @@ public class Minimum {
 		.map(CompletableFuture::join)
 		.reduce(Double.MAX_VALUE,(d1,d2)->Math.min(d1, d2));
 		
+		
 	}
 	
 	public static CompletableFuture<Double> calculateMinimumHelper(final int current,final double[][] distanceMatrix){

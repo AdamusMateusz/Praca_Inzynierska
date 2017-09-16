@@ -13,9 +13,8 @@ function($scope, $http, $routeParams,$timeout,$location,$window) {
 	$scope.selectedRoute = 0;
 	$scope.showNumbers = false;
 	$scope.fittingValues= [100,75,50,25];
-	$scope.svg = {minimum: {txt:0,h:50}};
+	$scope.svg = {last: {txt:0,h:50}};
 	$scope.svg.avg = {txt:0,h:50};
-	$scope.distance = {length:0,txt:""};
 	
 	$scope.svg.lines=[{txt:100,h:10/2},
 				{txt:75,h:(((1000 - (10/2)) - (50))/2)/4},
@@ -24,33 +23,7 @@ function($scope, $http, $routeParams,$timeout,$location,$window) {
                 {txt:0,h:(((1000 - (10/2)) - (50))/2)}];
 
 	$scope.$watch('showPositive.value',function(){
-		$scope.setPointsofFittingFunction();
-	});
-	
-	$scope.$watch('distance.txt',function(){
-		
-		if($scope.map !== undefined){
-			var cities = $scope.distance.txt.split(",");
-			var result = 0;
-			var citiesAreNumbers = true;
-			
-			if(cities.length <= 0 )
-				citiesAreNumbers = false;
-			
-			cities.forEach(function(element){
-				if(Number.isInteger(Number.parseInt(element)))
-					citiesAreNumbers = false;
-			});
-			
-			if(citiesAreNumbers){
-				for(var i = 1; i < cities.length; i++){
-					result += $scope.map.distanceMatrix[Number.parseInt(cities[i-1])][Number.parseInt(cities[i])];
-				}
-				result += 	  $scope.map.distanceMatrix[Number.parseInt(cities[cities.length-1])][Number.parseInt(cities[0])]
-			}
-		}
-		
-		$scope.distance.length = result|| 0;
+		$scope.setPointsofFittingFunction($scope.fittingValues);
 	});
 	
 	$scope.getMap = function(){
@@ -80,8 +53,8 @@ function($scope, $http, $routeParams,$timeout,$location,$window) {
 									if (response.status == 200) {
 										$scope.fittingValues = JSON.parse(JSON
 												.stringify(response.data));
-										
-										$scope.setPointsofFittingFunction();
+
+										$scope.setPointsofFittingFunction($scope.fittingValues);
 									}
 						});
 					}
@@ -114,8 +87,18 @@ function($scope, $http, $routeParams,$timeout,$location,$window) {
 		return 0;
 	};
 	
-	$scope.setPointsofFittingFunction = function(){
+	$scope.setPointsofFittingFunction = function(elements){
 		
+		if(elements){
+			
+			let valuesObj = new FittingElements(elements,$scope.showPositive.value);
+					
+			$scope.setLabels(valuesObj);
+			
+			$scope.pointsOfFitting = valuesObj.path;
+		}
+		
+		/*
 		//Multiply values of fitting function
 		for(var i=0; i < $scope.fittingValues.length; i++){
 			if($scope.fittingValues[i] != -1)
@@ -132,7 +115,7 @@ function($scope, $http, $routeParams,$timeout,$location,$window) {
 			}
 			
 			var max = Math.max.apply(null,elements);
-			var min = $scope.showPositive.value? 0 : Math.min.apply(null,elements);
+			var min = $scope.showPositive.value ? 0 : Math.min.apply(null,elements);
 			
 			$scope.svg.lines[0].txt = max;
 			$scope.svg.lines[1].txt = 3*(max+min)/4;
@@ -154,8 +137,8 @@ function($scope, $http, $routeParams,$timeout,$location,$window) {
 				return Math.abs((bottom+top) - (top + (jmpY * value)));
 			};
 			
-			$scope.svg.minimum.txt = elements[elements.length-1];
-			$scope.svg.minimum.h = $scope.getY(elements[elements.length-1]);
+			$scope.svg.last.txt = elements[elements.length-1];
+			$scope.svg.last.h = $scope.getY(elements[elements.length-1]);
 			
 			var s = "M " + positionX + " " + bottom +" ";
 			
@@ -174,7 +157,31 @@ function($scope, $http, $routeParams,$timeout,$location,$window) {
 			$scope.svg.avg.txt = avg;
 			$scope.svg.avg.h = $scope.getY(avg);
 		}
+		
+		*/
 	};
+	
+	$scope.setLabels = function(values){
+		
+		let min = values.min;
+		let max = values.max;
+		let lastH = values.lastH;
+		let lastTxt = values.lastTxt;
+		let avgH = values.avgH;
+		let avgTxt = values.avgTxt;
+		
+		$scope.svg.lines[0].txt = max;
+		$scope.svg.lines[1].txt = 3*(max+min)/4;
+		$scope.svg.lines[2].txt = (max+min)/2;
+		$scope.svg.lines[3].txt = (max+min)/4;
+		$scope.svg.lines[4].txt = min;
+		
+		$scope.svg.last.txt = lastTxt;
+		$scope.svg.last.h   = lastH;
+		
+		$scope.svg.avg.txt = avgTxt;
+		$scope.svg.avg.h   = avgH;
+	}
 	
 	
 	$scope.stop = function(){

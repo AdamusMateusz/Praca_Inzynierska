@@ -12,11 +12,6 @@ angular.module("myApp", [ 'controllers', 'ngRoute' ,'ui.bootstrap','ngAnimate' ]
 			}).when('/maps', {
 				controller : 'mapsController',
 				templateUrl : 'maps.html'
-			}).when('/stats', {
-				controller : 'statsController',
-				templateUrl : 'stats.html'
-			}).when('/edit', {
-				templateUrl : 'edit.html'
 			}).when('/edit', {
 				templateUrl : 'edit.html'
 			}).when('/map/:id', {

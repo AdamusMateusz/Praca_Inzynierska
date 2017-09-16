@@ -91,7 +91,7 @@ public class Task {
 				IntStream.range(0, quantity).forEach(i -> IntStream.range(0, quantity)
 						.forEach(j -> distanceMatrix[i][j] = f.apply(cities.get(i), cities.get(j))));
 
-				//calculate minimum if needed in heuristic way
+				//calculate minimum if needed
 				CompletableFuture<Double> minimum = (args.isHeuristic() && quantity <= 22) ?
 						CompletableFuture.supplyAsync(()->Minimum.calculateMinimum(distanceMatrix)):
 						CompletableFuture.completedFuture(new Double(-2));

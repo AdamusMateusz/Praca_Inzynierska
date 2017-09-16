@@ -17,11 +17,6 @@ public class HomeController {
 		return "start";
 	}
 
-	@RequestMapping(value = "/stats", method = RequestMethod.GET)
-	public String stats() {
-		return "stats";
-	}
-
 	@RequestMapping(value = "/maps", method = RequestMethod.GET)
 	public String maps() {
 		return "maps";

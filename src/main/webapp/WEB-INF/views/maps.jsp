@@ -141,7 +141,7 @@
 						<div class="col-md-offset-2 col-md-10">
 							<div class="checkbox">
 								<label><input type="checkbox"
-									ng-model="request.heuristic"> Policz dodatkowo rezultat w sposob heurystyczny</label>
+									ng-model="request.heuristic"> Policz dodatkowo rezultat przeliczajac wszystkie rozwiazania</label>
 							</div>
 						</div>
 					</div>
@@ -213,7 +213,7 @@
 				
 					<span class="glyphicon glyphicon-globe"></span> Ilosc miast: <span class="badge">{{map.cities.length}}</span><br>
 					<span class="glyphicon glyphicon-road"></span> Ilosc rodzicow: <span class="badge">{{map.parents}}</span><br>
-					<span ng-class="getTick(map.heuristic)"></span> Dodatkowy rezultat heurestyczny <span ng-if="map.heuristicValue != -2" class="badge">{{map.heuristicValue * 1000 | number :2}}</span><br>
+					<span ng-class="getTick(map.heuristic)"></span> Wynik pelnego przeszukiwania wszystkich rozwiazan<span ng-if="map.heuristicValue != -2" class="badge">{{map.heuristicValue * 1000 | number :2}}</span><br>
 					<span ng-class="getTick(map.saveFittingFunctionValue)"></span> Zapisuj wartosc funkcji oceny<br>
 					<span ng-class="getTick(!map.running)"></span> Zatrzymane<br>
 					<span class="glyphicon glyphicon-scale"></span> Jakosc najlepszego rozwiazania <span class="badge">{{map.quality == -1 ? -1 :( map.quality * 1000 | number :2)}}</span><br>

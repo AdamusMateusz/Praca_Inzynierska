@@ -44,7 +44,6 @@
 <script src="<c:url value="/resources/js/controllers.js" />"></script>
 <script src="<c:url value="/resources/js/mapsController.js" />"></script>
 <script src="<c:url value="/resources/js/mapController.js" />"></script>
-<script src="<c:url value="/resources/js/statsController.js" />"></script>
 <script src="<c:url value="/resources/js/chatController.js" />"></script>
 <script src="<c:url value="/resources/js/errorController.js" />"></script>
 
@@ -69,7 +68,6 @@
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
 					<li><a href="#/maps"> Mapy</a></li>
-					<li><a href="#/stats"> Statystyki</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
@@ -120,7 +118,7 @@
 		
 			
 			</div>
-			<div class="text-center">Loading site..</div>
+			<div class="text-center">Trwa ladowanie..</div>
 		</div>
 
 

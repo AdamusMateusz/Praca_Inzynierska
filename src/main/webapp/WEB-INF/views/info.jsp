@@ -7,107 +7,20 @@
 
 <div class="row well">
 	<div>
-		<h3>Miasto</h3>
+		<h3>Komiwojazer</h3>
 	</div>
-	<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-		adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl maximus
-		eu. Integer faucibus mauris posuere orci sollicitudin, vitae dignissim
-		orci sagittis. Etiam porttitor neque non egestas tincidunt. Curabitur
-		augue nulla, interdum in consectetur a, condimentum et ipsum. Class
-		aptent taciti sociosqu ad litora torquent per conubia nostra</div>
+	<div class="text-muted">Komiwojazer to aplikacja napisana w jezyku Java z przegladarkowym klientem
+	 umozliwiajaca rozwiazanie problemu komiwojazera. Mapa reprezentuje oddzielny problem skladajacy sie 
+	 z losowo wygenerowanych miast, ktory moze byc dowolnie sparametryzowany. Parametr 'ilosc miast' moze
+	 przyjac wartosci miedzy 5 a 99. Rozwiazanie otrzymywane jest za pomoca algorytmu genetycznego
+	 dla ktorego mozemy wybrac ilosc rodzicow oraz potomkow, sparametryzowac prawdopodobienstwo
+	 krzyzowania i mutacji oraz okreslic wymagany procent zmiany potomkow podczas kazdej iteracji
+	 algorytmu. Dodatkowo mozemy okreslic czy chcemy uwzgledniac populacje rodzicielska
+	 podczas generowania potomkow. Algorytm genetyczny nie jest w stanie okreslic czy zadanie
+	 jest juz zakonczone i aktualne zadanie jest najlepsze - okresla on tylko wartosc danego rozwiazania -
+	 jednak jezeli chcemy, to przed rozpoczeciem mozemy wyrazic chec przeszukania wszystkich rozwiazan 
+	 w skutek czego zadanie bedzie wykonywac sie tylko do momentu znalezienia najlepszego rozwiazania.
+	 Ta mozliwosc dostepna jest jedynie dla zadan w ktorych ilosc miast jest nie wieksza niz 22 ze wzgledu
+	 na zlozonosc obliczeniowa tego rozwiazania.
+	 Funkcjonalnosc aplikacji umozliwia sledzenie wartosci funkcji oceny.</div>
 </div>
-
-<div class="row well">
-	<div>
-		<h3>Rodzic</h3>
-	</div>
-	<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-		adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl maximus
-		eu. Integer faucibus mauris posuere orci sollicitudin, vitae dignissim
-		orci sagittis. Etiam porttitor neque non egestas tincidunt. Curabitur
-		augue nulla, interdum in consectetur a, condimentum et ipsum. Class
-		aptent taciti sociosqu ad litora torquent per conubia nostra</div>
-</div>
-
-<div class="row well">
-	<div>
-		<h3>Potomek</h3>
-	</div>
-	<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-		adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl maximus
-		eu. Integer faucibus mauris posuere orci sollicitudin, vitae dignissim
-		orci sagittis. Etiam porttitor neque non egestas tincidunt. Curabitur
-		augue nulla, interdum in consectetur a, condimentum et ipsum. Class
-		aptent taciti sociosqu ad litora torquent per conubia nostra</div>
-</div>
-
-<div class="row well">
-	<div>
-		<h3>Prawdopodobienstwo krzyzowania</h3>
-	</div>
-	<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-		adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl maximus
-		eu. Integer faucibus mauris posuere orci sollicitudin, vitae dignissim
-		orci sagittis. Etiam porttitor neque non egestas tincidunt. Curabitur
-		augue nulla, interdum in consectetur a, condimentum et ipsum. Class
-		aptent taciti sociosqu ad litora torquent per conubia nostra</div>
-	<div class="row">
-		<div class="col-md-6">
-			<h4>Chromosomu</h4>
-			<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-				adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl
-				maximus eu. Integer faucibus mauris posuere orci sollicitudin, vitae
-				dignissim orci sagittis.</div>
-		</div>
-		<div class="col-md-6">
-			<h4>Genu</h4>
-			<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-				adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl
-				maximus eu. Integer faucibus mauris posuere orci sollicitudin, vitae
-				dignissim orci sagittis.</div>
-		</div>
-
-	</div>
-</div>
-
-<div class="row well">
-	<div>
-		<h3>Prawdopodobienstwo mutacji</h3>
-	</div>
-	<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-		adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl maximus
-		eu. Integer faucibus mauris posuere orci sollicitudin, vitae dignissim
-		orci sagittis. Etiam porttitor neque non egestas tincidunt. Curabitur
-		augue nulla, interdum in consectetur a, condimentum et ipsum. Class
-		aptent taciti sociosqu ad litora torquent per conubia nostra</div>
-	<div class="row">
-		<div class="col-md-6">
-			<h4>Chromosomu</h4>
-			<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-				adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl
-				maximus eu. Integer faucibus mauris posuere orci sollicitudin, vitae
-				dignissim orci sagittis.</div>
-		</div>
-		<div class="col-md-6">
-			<h4>Genu</h4>
-			<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-				adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl
-				maximus eu. Integer faucibus mauris posuere orci sollicitudin, vitae
-				dignissim orci sagittis.</div>
-		</div>
-
-	</div>
-</div>
-
-<div class="row well">
-	<div>
-		<h3>Procent wymaganych osobnikow do zmiany</h3>
-	</div>
-	<div class="text-muted">Lorem ipsum dolor sit amet, consectetur
-		adipiscing elit. Aliquam tempus bibendum ex, vel ultrices nisl maximus
-		eu. Integer faucibus mauris posuere orci sollicitudin, vitae dignissim
-		orci sagittis. Etiam porttitor neque non egestas tincidunt. Curabitur
-		augue nulla, interdum in consectetur a, condimentum et ipsum. Class
-		aptent taciti sociosqu ad litora torquent per conubia nostra</div>
-</div>
-

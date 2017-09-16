@@ -136,9 +136,18 @@ public class Request {
 
 	@Override
 	public String toString() {
-
-		return "" +id+" " +citiesQuantity+" " +parents+" "+kids+" "+crossingGene+" "+crossingChromosome+" "+
-		mutationGene+" "+mutationChromosome+" "+change+" "+useParents+" "+
-				heuristic+" "+saveFittingFunctionValue+" ";
+		return new StringBuilder(190)
+				.append("id: ").append(id)
+				.append(", parents: ").append(parents)
+				.append(", kids: ").append(kids)
+				.append(", crossingGene: ").append(crossingGene)
+				.append(", crossingChromosome: ").append(crossingChromosome)
+				.append(", mutationGene: ").append(mutationGene)
+				.append(", mutationChromosome: ").append(mutationChromosome)
+				.append(", change: ").append(change)
+				.append(", useParents: ").append(useParents)
+				.append(", heuristic: ").append(heuristic)
+				.append(", saveFittingFunctionValue: ").append(saveFittingFunctionValue)
+				.toString();
 	}
 }

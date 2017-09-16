@@ -194,7 +194,7 @@
 						<div class="col-md-offset-2 col-md-10">
 							<div class="checkbox">
 								<label><input type="checkbox"
-									ng-model="request.heuristic"> Policz dodatkowo rezultat w sposob heurystyczny</label>
+									ng-model="request.heuristic"> Policz dodatkowo rezultat przeliczajac wszystkie rozwiazania</label>
 							</div>
 						</div>
 					</div>
@@ -260,16 +260,6 @@
 			</table>
 		</div>
 		
-<div>
-	<div class="form-group">
-		<label class="control-label" for="distance">Liczenie dlugosci trasy podanej przez uzytkownika</label>
-			<div class="input-group">
-				<input type="text" class="form-control" id="distance"
-					ng-model="distance.txt"> <span
-					class="input-group-addon">{{distance.length == -1 ? -1 :(distance.length * 1000 | number :2)}}</span>
-			</div>
-	</div>
-</div>
 		
 </pane>
  <pane heading="Wykres wartosci funkcji oceny" ng-if="request.saveFittingFunctionValue">
@@ -285,8 +275,8 @@
 			<path class="fitting map" ng-attr-d="{{pointsOfFitting}}"/>
 			
 			<g >
-				<line class="helper" x1="50" ng-attr-y1="{{svg.minimum.h}}" x2="995" ng-attr-y2="{{svg.minimum.h}}"/>
-				<text font-size="10" class="helper" x="55" ng-attr-y="{{svg.minimum.h-5}}">{{svg.minimum.txt|number :0}}</text>
+				<line class="helper" x1="50" ng-attr-y1="{{svg.last.h}}" x2="995" ng-attr-y2="{{svg.last.h}}"/>
+				<text font-size="10" class="helper" x="55" ng-attr-y="{{svg.last.h-5}}">{{svg.last.txt|number :0}}</text>
 			</g>
 			<g >
 				<line class="helper" x1="50" ng-attr-y1="{{svg.avg.h}}" x2="995" ng-attr-y2="{{svg.avg.h}}"/>

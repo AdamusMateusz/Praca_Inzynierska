@@ -21,26 +21,8 @@
 	<footer>Wikipedia</footer>
 </blockquote>
 
-<h3>Historia</h3>
-<div class="text-muted">Poczatek badan nad problemem komiwojazera
-	nie jest jasny. Wspomina o nim podrecznik z 1832, który zawiera
-	przykladowa trase po Niemczech i Szwajcarii, lecz nie zawiera zadnych
-	matematycznych uzasadnien. W 1859 irlandzki matematyk William Rowan
-	Hamilton sformulowal problem istnienia cyklu o dlugosci n w grafie
-	n-wierzcholkowym. Za faktycznego tworce problemu komiwojazera uznaje
-	sie austriackiego matematyka Karla Mengera, ktory go zdefiniowal w
-	1930, zwracajac szczegolna uwage na stopien jego skomplikowania.
-	Niezaleznie od niego ten sam problem poruszyl w 1934 Hassler Witney na
-	wykladzie w Princeton University. Natomiast pierwsze praktyczne
-	zastosowanie problemu mialo miejsce w 1937, gdy Merrill Flood pracowal
-	nad rozwiazaniem wyznaczania tras dla autobusow szkolnych. Z uwagi na
-	bardzo prosty opis problemu oraz opinii o bardzo trudnym obliczeniowo
-	procesie optymalizacji, problem komiwojazera stal sie bardzo popularny.
-	Fascynacja ta trwa od lat piecdziesiatych XX wieku do dzis, zarowno
-	wsrod amatorow jak i profesjonalistow.</div>
-
 <div class="row linki">
-	<div class=" col-sm-offset-1 col-sm-3">
+	<div class=" col-sm-offset-1 col-sm-4">
 		<div class="well">
 		
 			<div class="svg-container-startpage-miniature">
@@ -71,34 +53,8 @@
 				wszysktich map</div>
 		</div>
 	</div>
-	<div class="col-sm-3">
-		<div class="well">
-		
-			<div class="svg-container-startpage-miniature">
-				<svg version="1.1" style="margin-top: 15px;" viewBox="0 0 200 200"
-					preserveAspectRatio="xMinYMin meet" class="svg-content startMiniature">
 
-<line id="linia1Staty" style="fill:none;stroke-width:30;stroke-miterlimit:10;" x1="56" y1="176" x2="56" y2="34"/>
-<line id="linia2Staty" style="fill:none;stroke-width:30;stroke-miterlimit:10;" x1="100" y1="176" x2="100" y2="127"/>
-<line id="linia3Staty" style="fill:none;stroke-width:30;stroke-miterlimit:10;" x1="144" y1="176" x2="144" y2="57.333"/>
-<line id="obrys" style="fill:none;stroke-width:5;stroke-miterlimit:10;" x1="23.333" y1="18.667" x2="23.333" y2="189.333"/>
-<line id="obrys" style="fill:none;stroke-width:5;stroke-miterlimit:10;" x1="8.333" y1="176" x2="184" y2="176"/>
-<rect id="etykieta" x="51.75" y="20.5" style="fill:#FFFFFF;stroke-width:2;stroke-miterlimit:10;" width="8.5" height="8.5"/>
-<circle id="etykieta" style="fill:#FFFFFF;stroke-width:2;stroke-miterlimit:10;" cx="100" cy="118" r="4.833"/>
-<polygon id="etykieta" style="fill:#FFFFFF;stroke-width:2;stroke-miterlimit:10;" points="144,43.903 
-	139.654,51.431 148.346,51.431 "/>
-				</svg>
-			</div>
-			
-			<h4>
-				Statystyki <a href="#/stats" class="btn btn-link btn-lg"><span
-					class="glyphicon glyphicon-arrow-right"></span></a>
-			</h4>
-			<div class="text-muted">Statystyki zwiazane z dzialaniem
-				serwera</div>
-		</div>
-	</div>
-	<div class="col-sm-3">
+	<div class="col-sm-offset-2 col-sm-4">
 		<div class="well">
 		
 			<div class="svg-container-startpage-miniature">
@@ -124,4 +80,25 @@
 				do komunikacji</div>
 		</div>
 	</div>
+	
+	
+</div>
+<div class="well">
+	<h3>Historia</h3>
+	<div class="text-muted">Poczatek badan nad problemem komiwojazera
+		nie jest jasny. Wspomina o nim podrecznik z 1832, który zawiera
+		przykladowa trase po Niemczech i Szwajcarii, lecz nie zawiera zadnych
+		matematycznych uzasadnien. W 1859 irlandzki matematyk William Rowan
+		Hamilton sformulowal problem istnienia cyklu o dlugosci n w grafie
+		n-wierzcholkowym. Za faktycznego tworce problemu komiwojazera uznaje
+		sie austriackiego matematyka Karla Mengera, ktory go zdefiniowal w
+		1930, zwracajac szczegolna uwage na stopien jego skomplikowania.
+		Niezaleznie od niego ten sam problem poruszyl w 1934 Hassler Witney na
+		wykladzie w Princeton University. Natomiast pierwsze praktyczne
+		zastosowanie problemu mialo miejsce w 1937, gdy Merrill Flood pracowal
+		nad rozwiazaniem wyznaczania tras dla autobusow szkolnych. Z uwagi na
+		bardzo prosty opis problemu oraz opinii o bardzo trudnym obliczeniowo
+		procesie optymalizacji, problem komiwojazera stal sie bardzo popularny.
+		Fascynacja ta trwa od lat piecdziesiatych XX wieku do dzis, zarowno
+		wsrod amatorow jak i profesjonalistow.</div>
 </div>

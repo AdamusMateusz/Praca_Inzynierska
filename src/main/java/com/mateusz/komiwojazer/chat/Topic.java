@@ -1,11 +1,12 @@
 package com.mateusz.komiwojazer.chat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Topic {
+public class Topic implements Serializable{
 	private final String title;
 	private final List<Message> messages;
 

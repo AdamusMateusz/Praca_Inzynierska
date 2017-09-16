@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChatService {
 
-	private final List<Topic> topics;
+	private List<Topic> topics;
 
 	public ChatService() {
 		topics = new ArrayList<Topic>();
@@ -31,7 +31,8 @@ public class ChatService {
 	public void addMessage(int topicId, Message m){
 		topics.get(topicId).addMessage(m);
 	}
-
+	
+	
 	//@PostConstruct
 	public void generateFakeTopics() {
 		final String fakeTitles[] = { "O stronie", "Algorytm", "Problemy", "Rozmowy ogólne", "Przywitaj siê",
@@ -46,9 +47,5 @@ public class ChatService {
 			topics.add(t);
 		}
 	}
-	
-	/*
-	 * Metody zwi¹zane ze statystykami chatu
-	 * */
-	
+		
 }

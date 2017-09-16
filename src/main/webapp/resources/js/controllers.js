@@ -1,2 +1,2 @@
 angular.module("controllers", [ 'mapsControllerModule', 'mapControllerModule',
-		'statsControllerModule', 'chatControllerModule','errorControllerModule' ]);
+                                'chatControllerModule','errorControllerModule' ]);

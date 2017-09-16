@@ -1,6 +1,8 @@
 package com.mateusz.komiwojazer.chat;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable{
 
 	private String author;
 	private String message;

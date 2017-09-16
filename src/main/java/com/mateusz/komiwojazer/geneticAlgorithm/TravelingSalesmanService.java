@@ -53,6 +53,7 @@ public class TravelingSalesmanService {
 	}
 	
 	private Integer startNewTask(int id, Request request, boolean stopped) {
+		System.out.println(request);
 		Integer key = (id == -1 ? counter.getAndIncrement() : id);
 		request.setId(key);
 		arguments.put(key, request);

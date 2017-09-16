@@ -1,7 +1,7 @@
 package com.mateusz.komiwojazer.controllers;
 
 import java.util.List;
-import java.util.Queue;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -31,60 +31,41 @@ public class KomiwojazerController {
 	private static final int AWAIT_TIME = 10;
 
 	@Autowired
-	private TravelingSalesmanService service;
+	private TravelingSalesmanService travelingSalesmanService;
 
 	@RequestMapping(value = "/startMap", method = RequestMethod.POST)
 	public @ResponseBody Integer startNewMap(@RequestBody Request set,@RequestParam("stopped")boolean stopped) {
-		return service.startNewTask(set,stopped);
+		return travelingSalesmanService.startNewTask(set,stopped);
 	}
 
 	@RequestMapping(value = "/changeRequest/{id}", method = RequestMethod.PUT)
 	public void updateRequest(@RequestBody Request set, @PathVariable("id") int id) {
 		set.setId(id);
-		service.updateRequest(id, set);
+		travelingSalesmanService.updateRequest(id, set);
 	}
 	
 	@RequestMapping(value = "/getRequest/{id}", method = RequestMethod.GET)
 	public @ResponseBody Request getRequest(@PathVariable("id") int id) {
-		return service.getRequest(id);
+		return travelingSalesmanService.getRequest(id);
 	}
 	
 	@RequestMapping(value = "/stopMap/{id}", method = RequestMethod.PATCH)
 	public boolean stopMap(@PathVariable("id") int id) {
-		return service.stop(id);
+		return travelingSalesmanService.stop(id);
 	}
 	
 	@RequestMapping(value = "/resumeMap/{id}", method = RequestMethod.PATCH)
 	public boolean resumeMap(@PathVariable("id") int id) {
-		return service.resume(id);
+		return travelingSalesmanService.resume(id);
 	}
 	
 	@RequestMapping(value = "/isRunningMap/{id}", method = RequestMethod.GET)
 	public boolean isRunning(@PathVariable("id") int id) {
-		return service.isRunning(id);
+		return travelingSalesmanService.isRunning(id);
 	}
 	
 	@RequestMapping(value = "/getFittingFunctionValues/{id}", method = RequestMethod.GET)
-	public @ResponseBody Queue<Double> getFittingFunctionValues(@PathVariable("id") int id) {
-		/*List<Double> values = new ArrayList<>();
-		
-		for(int i = ThreadLocalRandom.current().nextInt(100,201); i >= 0; i--){
-			values.add(new Double(-1));
-		}
-		
-		double max = ThreadLocalRandom.current().nextDouble(2000.0, 30000.0);
-		
-		while (max > 800){
-			
-			for(int i = ThreadLocalRandom.current().nextInt(5,20); i >=0;i--)
-				values.add(new Double(max/1000.0));
-			
-			
-			max -= ThreadLocalRandom.current().nextDouble(50,300);
-		}
-		
-		return values;*/
-		
+	public @ResponseBody Map<Double, Integer> getFittingFunctionValues(@PathVariable("id") int id) {
 		return FittingValueService.getValues(id);
 	}
 	
@@ -92,26 +73,26 @@ public class KomiwojazerController {
 	@RequestMapping(value = "/getMap/{id}", method = RequestMethod.GET)
 	public @ResponseBody Task getMap(@PathVariable("id") int id)
 			throws InterruptedException, ExecutionException, TimeoutException {
-		return service.getMap(id).get(AWAIT_TIME, TimeUnit.SECONDS);
+		return travelingSalesmanService.getMap(id).get(AWAIT_TIME, TimeUnit.SECONDS);
 	}
 
 	@RequestMapping(value = "/getMapsOverview/{id}", method = RequestMethod.GET)
 	public @ResponseBody List<MapOverwiew> getMapsOverview(@PathVariable("id") int id) {
-		return service.getMapsOverview(id);
+		return travelingSalesmanService.getMapsOverview(id);
 	}
 
 	@RequestMapping(value = "/getAllMapsOverview", method = RequestMethod.GET)
 	public @ResponseBody List<MapOverwiew> getAllMapsOverview() {
-		return service.getAllMapsOverview();
+		return travelingSalesmanService.getAllMapsOverview();
 	}
 
 	@RequestMapping(value = "/deleteMap/{id}", method = RequestMethod.DELETE)
 	public void deleteMap(@PathVariable("id") int id) {
-		service.delete(id);
+		travelingSalesmanService.delete(id);
 	}
 
 	public void setService(TravelingSalesmanService service) {
-		this.service = service;
+		this.travelingSalesmanService = service;
 	}
 
 	@ExceptionHandler(TimeoutException.class)
@@ -145,7 +126,7 @@ public class KomiwojazerController {
 //	@PostConstruct
 	public void constructFakeMaps(){
 		for (int i=5; i <= 50; i+=5)
-			service.startNewTask(Request.randomFakeSet(i));
+			travelingSalesmanService.startNewTask(Request.randomFakeSet(i));
 		
 	}
 }
